@@ -6,7 +6,7 @@
 /*   By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 13:55:47 by lsun              #+#    #+#             */
-/*   Updated: 2023/03/15 22:58:42 by linlinsun        ###   ########.fr       */
+/*   Updated: 2023/03/15 23:50:25 by linlinsun        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,18 @@ gcc main.c ft_atoi.c  ft_itoa.c  ft_strlen.c ft_strncmp.c  ft_digit_num.c
 
 #include "philo.h"
 
+int philo_needs_to_eat()
+{
+	return (0);
+}
+
+// here I can call a lot of sub functions, so that each threads are able to run it.
 void* func(void* forks)
 {
 	printf("Is my fork available? Fork is %d.\n", *((int*)forks));
+	usleep(1000000); // *1000
+	printf("sleeping finished.\n");
+	// philo_needs_to_eat()
 	return (NULL);
 }
 
@@ -112,6 +121,7 @@ int main(int argc, char** argv)
 	int i;
 	int * forks;
 	t_philo *ph;
+	t_carry *carry;
 
 	// parsing
 	if (argc < 5 || argc > 6)
@@ -120,7 +130,8 @@ int main(int argc, char** argv)
 		return (0);
 	}
 	ph = malloc(sizeof(t_philo) * 1);
-	if (!ph)
+	carry = malloc(sizeof(t_carry) * 1);
+	if (!ph || !carry)
 		return(1);
 	if (parsing(ph, argc, argv) == 0 )
 	{
@@ -131,7 +142,9 @@ int main(int argc, char** argv)
 	forks = init_forks(ph);
 	if (!forks)
 		return(0);
+	pthread_mutex_init(&carry->mutex_forks, NULL);
 	if (init_threads(ph, forks) == 0)
 		return (3);
+	pthread_mutex_destroy(&carry->mutex_forks);
 	return(0);
 }
