@@ -6,7 +6,7 @@
 /*   By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 13:55:47 by lsun              #+#    #+#             */
-/*   Updated: 2023/03/23 20:25:05 by linlinsun        ###   ########.fr       */
+/*   Updated: 2023/03/23 20:48:03 by linlinsun        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,12 @@ gcc main.c ft_atoi.c  ft_itoa.c  ft_strlen.c ft_strncmp.c  ft_digit_num.c
 */
 
 #include "philo.h"
+
+void printf_and_return(char* str, int code)
+{
+	printf("%s\n", str);
+	return(code);
+}
 
 int* init_forks(t_philo *ph)
 {
@@ -51,7 +57,7 @@ void* philo_needs_to_eat(void *arg)
 
 	ph = (t_philo*)arg;
 	usleep(1000000); // *1000
-	printf("hello from philo %d.\n", ph->thread_id);
+	printf("hello from philo %lu.\n", *ph->thread_id);
 	return (0);
 }
 
@@ -72,29 +78,20 @@ int init_threads(t_philo *ph, int *forks)
 	pthread_t philo[ph->num + 1];
 
 	i = 0;
-	while (i < ph->num + 1)
-	{
-		if (i == ph->num && pthread_create(&philo[i], NULL, &scheduler, (void*)ph) != 0)
-		{
-			printf("error in creating threads.\n");
-			return(0);
-		}
-		else if (pthread_create(&philo[i], NULL, &philo_needs_to_eat, (void*)ph) != 0)
-		{
-			printf("error in creating threads.\n");
-			return(0);
-		}
-		ph->thread_id = i;
-		i++;
-	}
-	i = 0;
 	while (i < ph->num)
 	{
+		ph->thread_id = &philo[i];
+		if (pthread_create(&philo[i], NULL, &philo_needs_to_eat, (void*)ph) != 0)
+			printf_and_return("error in creating threads.", 0);
+		i++;
+	}
+	if (pthread_create(&philo[i], NULL, &scheduler, (void*)ph) != 0)
+		printf_and_return("error in creating threads.", 0);
+	i = 0;
+	while (i < ph->num + 1)
+	{
 		if (pthread_join(philo[i], NULL) != 0)
-		{
-			printf("error in joining threads.\n");
-			return(0);
-		}
+			printf_and_return("error in joining threads.", 0);
 		i++;
 	}
 	return(1);
