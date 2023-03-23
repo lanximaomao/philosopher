@@ -6,7 +6,7 @@
 /*   By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 13:55:47 by lsun              #+#    #+#             */
-/*   Updated: 2023/03/15 23:50:25 by linlinsun        ###   ########.fr       */
+/*   Updated: 2023/03/23 20:25:05 by linlinsun        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,80 +25,6 @@ gcc main.c ft_atoi.c  ft_itoa.c  ft_strlen.c ft_strncmp.c  ft_digit_num.c
 
 #include "philo.h"
 
-int philo_needs_to_eat()
-{
-	return (0);
-}
-
-// here I can call a lot of sub functions, so that each threads are able to run it.
-void* func(void* forks)
-{
-	printf("Is my fork available? Fork is %d.\n", *((int*)forks));
-	usleep(1000000); // *1000
-	printf("sleeping finished.\n");
-	// philo_needs_to_eat()
-	return (NULL);
-}
-
-int is_unsigned_int(char* str)
-{
-	if (ft_strncmp(str, ft_itoa(ft_atoi(str)), ft_strlen(str)) == 0 && ft_atoi(str) > 0)
-		return(1);
-	else
-		return(0);
-}
-
-int parsing(t_philo *ph, int argc, char** argv)
-{
-	int i;
-
-	argv++;
-	if (is_unsigned_int(argv[0]) == 0 || is_unsigned_int(argv[1]) == 0 || is_unsigned_int(argv[0]) == 0 || is_unsigned_int(argv[1]) == 0)
-	{
-		printf("not a number. \n");
-		return (0);
-	}
-	if (argc == 6 && is_unsigned_int(argv[0]) == 0)
-		return (0);
-	ph->num = ft_atoi(argv[0]);
-	ph->time_to_die = ft_atoi(argv[1]);
-	ph->time_to_eat = ft_atoi(argv[2]);
-	ph->time_to_sleep = ft_atoi(argv[3]);
-	if (argc == 6)
-		ph->must_eat = ft_atoi(argv[4]);
-	else
-		ph->must_eat = 1000;
-	return(1);
-}
-
-int init_threads(t_philo *ph, int *forks)
-{
-	int i;
-	pthread_t each_philo[ph->num];
-
-	i = 0;
-	while (i < ph->num)
-	{
-		if(pthread_create(&each_philo[i], NULL, &func, &forks[i]) != 0)
-		{
-			printf("error in creating threads.\n");
-			return(0);
-		}
-		i++;
-	}
-	i = 0;
-	while (i < ph->num)
-	{
-		if (pthread_join(each_philo[i], NULL) != 0)
-		{
-			printf("error in joining threads.\n");
-			return(0);
-		}
-		i++;
-	}
-	return(1);
-}
-
 int* init_forks(t_philo *ph)
 {
 	int i;
@@ -116,35 +42,78 @@ int* init_forks(t_philo *ph)
 	return(forks);
 }
 
+void* philo_needs_to_eat(void *arg)
+{
+	int fork_left;
+	int fork_right;
+	t_philo *ph;
+
+
+	ph = (t_philo*)arg;
+	usleep(1000000); // *1000
+	printf("hello from philo %d.\n", ph->thread_id);
+	return (0);
+}
+
+void* scheduler(void *arg)
+{
+	//int* forks;
+	//forks = init_forks(ph);
+	//if (!forks)
+	//	return(0);
+	//else
+	//	return(1);
+	return (NULL);
+}
+
+int init_threads(t_philo *ph, int *forks)
+{
+	int i;
+	pthread_t philo[ph->num + 1];
+
+	i = 0;
+	while (i < ph->num + 1)
+	{
+		if (i == ph->num && pthread_create(&philo[i], NULL, &scheduler, (void*)ph) != 0)
+		{
+			printf("error in creating threads.\n");
+			return(0);
+		}
+		else if (pthread_create(&philo[i], NULL, &philo_needs_to_eat, (void*)ph) != 0)
+		{
+			printf("error in creating threads.\n");
+			return(0);
+		}
+		ph->thread_id = i;
+		i++;
+	}
+	i = 0;
+	while (i < ph->num)
+	{
+		if (pthread_join(philo[i], NULL) != 0)
+		{
+			printf("error in joining threads.\n");
+			return(0);
+		}
+		i++;
+	}
+	return(1);
+}
+
 int main(int argc, char** argv)
 {
 	int i;
 	int * forks;
 	t_philo *ph;
-	t_carry *carry;
 
-	// parsing
-	if (argc < 5 || argc > 6)
-	{
-		printf("wrong number of arguments.\n");
-		return (0);
-	}
 	ph = malloc(sizeof(t_philo) * 1);
-	carry = malloc(sizeof(t_carry) * 1);
-	if (!ph || !carry)
-		return(1);
-	if (parsing(ph, argc, argv) == 0 )
-	{
-		printf("wrong input.\n");
+	if (!ph)
+		return (1);
+	if (parsing(ph, --argc, ++argv) == 0 )
 		return (2);
-	}
+	printf("philo = %d\ntime_to_die = %d\ntime_to_eat = %d\ntime_to_sleep = %d\nmust_eat = %d\n\n\n", ph->num, ph->time_to_die, ph->time_to_eat, ph->time_to_sleep, ph->must_eat);
 	//creating multiple threads
-	forks = init_forks(ph);
-	if (!forks)
-		return(0);
-	pthread_mutex_init(&carry->mutex_forks, NULL);
 	if (init_threads(ph, forks) == 0)
 		return (3);
-	pthread_mutex_destroy(&carry->mutex_forks);
 	return(0);
 }
