@@ -14,10 +14,13 @@
 //	printf("time difference: %ld\n", (after.tv_usec-before.tv_usec) / 1000 + (after.tv_sec - before.tv_sec) * 1000);
 //}
 
-int timestamp(struct  timeval before, struct timeval after)
+long timestamp(struct  timeval before)
 {
-	int timestamp;
+	long timestamp;
+	struct timeval after;
 
+	gettimeofday(&after, NULL);
 	timestamp = (after.tv_sec - before.tv_sec) * 1000 + (after.tv_usec - before.tv_usec)/1000;
+	return(timestamp);
 }
 
