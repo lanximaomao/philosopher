@@ -6,7 +6,7 @@
 /*   By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 13:55:47 by lsun              #+#    #+#             */
-/*   Updated: 2023/03/26 16:40:19 by linlinsun        ###   ########.fr       */
+/*   Updated: 2023/03/26 19:29:26 by linlinsun        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@ pthread_mutex_unlock
 */
 
 /*
+** EAT--> THINK --> SLEEP
+*/
+
+/*
 gcc main.c ft_atoi.c  ft_itoa.c  ft_strlen.c ft_strncmp.c  ft_digit_num.c
 */
 
@@ -30,7 +34,7 @@ int* init_forks(t_philo *ph)
 	int i;
 	int* forks;
 
-	forks = malloc(sizeof(int) * (ph->num + 1));
+	forks = malloc(sizeof(int) * (ph->num + 1));//free
 	if (!forks)
 		return (NULL); // error catch
 	i = 0;
@@ -44,19 +48,48 @@ int* init_forks(t_philo *ph)
 
 void* philo_needs_to_eat(void *arg)
 {
-	int fork_left;
-	int fork_right;
 	t_philo *phs;
-
+	struct timeval before;
+	struct timeval	after;
 
 	phs = (t_philo*)arg;
-	usleep(1000000); // *1000
-	printf("hello from philo %d.\n", phs->thread_id);
+	gettimeofday(&before, NULL);
+	while (1)
+	{
+		gettimeofday(&after, NULL);
+		// how to calculate time until last meal??
+		if (phs->last_meal == 1 && phs->is_eating == 0)
+		{
+			scheduler((void*)phs); // ask for forks
+			printf("philo %d has taken a fork.\n", phs->thread_id);
+		}
+		if (phs->is_eating == 1)
+			printf("philo %d is eating.\n", phs->thread_id);
+		else if (phs->is_thinking == 1)
+			printf("philo %d is thinking.\n", phs->thread_id);
+		else if (phs->is_sleeping == 1)
+			printf("philo %d is sleeping.\n", phs->thread_id);
+		// die
+		if (phs->is_alive == 0)
+		{
+			printf("philo %d died.\n", phs->thread_id);
+			return(NULL);
+		}
+	}
 	return (0);
 }
 
 void* scheduler(void *arg)
 {
+	t_philo *phs;
+
+	phs = (t_philo*)arg;
+	if(phs->thread_id == phs->num + 1)
+		printf("hello from scheduler %d.\n", phs->thread_id);
+	else if(phs->thread_id % 2 == 0 )
+		printf("I am philo %d and I can eat first.\n", phs->thread_id);
+	else if(phs->thread_id % 2 != 0 )
+		printf("I am philo %d and I need to wait.\n", phs->thread_id);
 	return (NULL);
 }
 

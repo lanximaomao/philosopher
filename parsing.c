@@ -35,8 +35,13 @@ void philo_init(t_philo *ph, t_philo *phs)
 		(phs[i]).time_to_eat = ph->time_to_eat;
 		(phs[i]).time_to_sleep = ph->time_to_sleep;
 		(phs[i]).must_eat = ph->must_eat;
-		(phs[i]).thread_id = i;
+		(phs[i]).thread_id = i + 1;
+		(phs[i]).eat_count = 0;
 		(phs[i]).is_alive = 1;
+		(phs[i]).last_meal = 0;
+		(phs[i]).is_eating = 0;
+		(phs[i]).is_thinking = 0;
+		(phs[i]).is_sleeping = 0;
 		(phs[i]).left = 0;
 		(phs[i]).right = 0;
 		i++;
