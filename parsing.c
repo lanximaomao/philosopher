@@ -22,3 +22,23 @@ int parsing(t_philo *ph, int argc, char** argv)
 	printf("wrong input.\n");
 	return(0);
 }
+
+void philo_init(t_philo *ph, t_philo *phs)
+{
+	int i;
+
+	i = 0;
+	while (i < ph->num + 1)
+	{
+		(phs[i]).num = ph->num;
+		(phs[i]).time_to_die = ph->time_to_die;
+		(phs[i]).time_to_eat = ph->time_to_eat;
+		(phs[i]).time_to_sleep = ph->time_to_sleep;
+		(phs[i]).must_eat = ph->must_eat;
+		(phs[i]).thread_id = i;
+		(phs[i]).is_alive = 1;
+		(phs[i]).left = 0;
+		(phs[i]).right = 0;
+		i++;
+	}
+}

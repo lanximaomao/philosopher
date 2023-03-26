@@ -6,7 +6,7 @@
 /*   By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 13:55:47 by lsun              #+#    #+#             */
-/*   Updated: 2023/03/25 14:40:53 by linlinsun        ###   ########.fr       */
+/*   Updated: 2023/03/26 16:40:19 by linlinsun        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,12 @@ void* philo_needs_to_eat(void *arg)
 {
 	int fork_left;
 	int fork_right;
-	t_philo *ph;
+	t_philo *phs;
 
 
-	ph = (t_philo*)arg;
+	phs = (t_philo*)arg;
 	usleep(1000000); // *1000
-	printf("hello from philo %p.\n", ph->thread_id);
+	printf("hello from philo %d.\n", phs->thread_id);
 	return (0);
 }
 
@@ -60,29 +60,29 @@ void* scheduler(void *arg)
 	return (NULL);
 }
 
-int init_threads(t_philo *ph, int *forks)
+int init_threads(t_philo *phs)
 {
 	int i;
-	pthread_t philo[ph->num + 1];
+	pthread_t philo[phs->num + 1];
 
 	i = 0;
-	while (i < ph->num + 1)
+	while (i < phs->num + 1)
 	{
-		ph->thread_id = philo[i];
-		if (i < ph->num && pthread_create(&philo[i], NULL, &philo_needs_to_eat, (void*)ph) != 0)
+		if (i < phs->num && pthread_create(&philo[i], NULL, &philo_needs_to_eat, (void*)(phs)) != 0)
 		{
 			printf("error in creating threads.\n");
 			return(0);
 		}
-		else if (i == ph->num && pthread_create(&philo[i], NULL, &scheduler, (void*)ph) != 0)
+		else if (i == phs->num && pthread_create(&philo[i], NULL, &scheduler, (void*)(phs)) != 0)
 		{
 			printf("error in creating threads.\n");
 			return(0);
 		}
 		i++;
+		phs++;
 	}
 	i = 0;
-	while (i < ph->num + 1)
+	while (i < phs->num + 1)
 	{
 		if (pthread_join(philo[i], NULL) != 0)
 		{
@@ -97,17 +97,20 @@ int init_threads(t_philo *ph, int *forks)
 int main(int argc, char** argv)
 {
 	int i;
-	int * forks;
 	t_philo *ph;
+	t_philo *phs;
 
-	ph = malloc(sizeof(t_philo) * 1);
+	ph = malloc(sizeof(t_philo) * 1); //free
 	if (!ph)
 		return (1);
 	if (parsing(ph, --argc, ++argv) == 0 )
 		return (2);
 	printf("philo = %d\ntime_to_die = %d\ntime_to_eat = %d\ntime_to_sleep = %d\nmust_eat = %d\n\n\n", ph->num, ph->time_to_die, ph->time_to_eat, ph->time_to_sleep, ph->must_eat);
+	// creating multiple philos
+	phs = malloc(sizeof(t_philo) * (ph->num + 1));
+	philo_init(ph, phs);
 	//creating multiple threads
-	if (init_threads(ph, forks) == 0)
+	if (init_threads(phs) == 0)
 		return (3);
 	return(0);
 }
