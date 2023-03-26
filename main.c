@@ -6,7 +6,7 @@
 /*   By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 13:55:47 by lsun              #+#    #+#             */
-/*   Updated: 2023/03/26 21:39:53 by linlinsun        ###   ########.fr       */
+/*   Updated: 2023/03/27 00:13:46 by linlinsun        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,22 +29,7 @@ gcc main.c ft_atoi.c  ft_itoa.c  ft_strlen.c ft_strncmp.c  ft_digit_num.c
 
 #include "philo.h"
 
-int* init_forks(t_philo *ph)
-{
-	int i;
-	int* forks;
 
-	forks = malloc(sizeof(int) * (ph->num));//free
-	if (!forks)
-		return (NULL); // error catch
-	i = 0;
-	while (i < ph->num)
-	{
-		forks[i] = ph->num + 1;
-		i++;
-	}
-	return(forks);
-}
 
 void* philo_needs_to_eat(void *arg)
 {
@@ -69,30 +54,32 @@ void* philo_needs_to_eat(void *arg)
 		scheduler((void*)phs); // ask for forks // if this returns null due to malloc fail?
 		printf("%ld philo %d has taken a fork.\n", timestamp(before), phs->thread_id);
 		printf("%ld philo %d is eating.\n", timestamp(before), phs->thread_id);
-		usleep(phs->time_to_eat);
+		usleep(phs->time_to_eat * 1000);
 		gettimeofday(&(phs->last_meal), NULL);
+		//put back forks
+		put_back_forks(phs);
 		phs->meal_count++;
-		usleep(phs->time_to_sleep);
+		usleep(phs->time_to_sleep * 1000);
 		printf("%ld philo %d is sleeping.\n", timestamp(before), phs->thread_id);
 	}
 	return (0);
 }
 
+int put_back_forks(t_philo *phs)
+{
+	return (1);
+}
+
 void* scheduler(void *arg)
 {
 	t_philo *phs;
-	int* forks;
 
 	phs = (t_philo*)arg;
-	forks = init_forks(phs);
-	if (!forks)
-		return(NULL);
-	printf("my fork condition is %d-%d-%d-%d\n", forks[0], forks[1],forks[2], forks[3]);
-	first_meal(phs, forks); 	// call first meal function
+	printf("my fork condition is %d-%d-%d-%d\n", phs->forks[0], phs->forks[1],phs->forks[2], phs->forks[3]);
+	first_meal(phs, phs->forks); 	// call first meal function
 	if(phs->thread_id == phs->num + 1)
 		printf("hello from scheduler %d and I have all the forks.\n", phs->thread_id);
-	printf("my fork condition after first meal is %d-%d-%d-%d\n", forks[0], forks[1],forks[2], forks[3]);
-	free(forks);
+	printf("my fork condition after first meal is %d-%d-%d-%d\n", phs->forks[0], phs->forks[1],phs->forks[2], phs->forks[3]);
 	return (NULL);
 }
 

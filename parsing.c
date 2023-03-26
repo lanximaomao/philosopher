@@ -23,11 +23,39 @@ int parsing(t_philo *ph, int argc, char** argv)
 	return(0);
 }
 
-void philo_init(t_philo *ph, t_philo *phs)
+int init_mutex(t_philo *ph)
+{
+
+	ph->mutex_forks = malloc(sizeof(pthread_mutex_t) * ph->num);
+	if (!ph->mutex_forks)
+		return(0);
+	else
+		return(1);
+}
+
+int init_forks(t_philo *ph)
+{
+	int i;
+
+	ph->forks = malloc(sizeof(int) * (ph->num));//free
+	if (!ph->forks)
+		return (0); // error catch
+	i = 0;
+	while (i < ph->num)
+	{
+		ph->forks[i] = ph->num + 1;
+		i++;
+	}
+	return(1);
+}
+
+int philo_init(t_philo *ph, t_philo *phs)
 {
 	int i;
 
 	i = 0;
+	if (init_forks(ph) == 0 || init_mutex(ph) == 0)
+		return (0);
 	while (i < ph->num + 1)
 	{
 		(phs[i]).num = ph->num;
@@ -41,8 +69,9 @@ void philo_init(t_philo *ph, t_philo *phs)
 		(phs[i]).is_eating = 0;
 		(phs[i]).is_thinking = 0;
 		(phs[i]).is_sleeping = 0;
-		(phs[i]).left = 0;
-		(phs[i]).right = 0;
+		(phs[i]).forks = ph->forks;
+		(phs[i]).mutex_forks = ph->mutex_forks;
 		i++;
 	}
+	return(1);
 }

@@ -6,7 +6,7 @@
 /*   By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 20:05:24 by linlinsun         #+#    #+#             */
-/*   Updated: 2023/03/26 21:01:35 by linlinsun        ###   ########.fr       */
+/*   Updated: 2023/03/27 00:06:11 by linlinsun        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ typedef struct s_philo
 	int				is_thinking;
 	int				is_sleeping;
 	struct timeval	last_meal;
-	int				left;
-	int				right;
+	int*	forks;
+	pthread_mutex_t* mutex_forks;
 }					t_philo;
 
 typedef struct s_info
@@ -44,8 +44,10 @@ typedef struct s_info
 
 int					parsing(t_philo *ph, int argc, char **argv);
 int					ft_atoi(const char *str);
-void				philo_init(t_philo *ph, t_philo *phs);
+int				philo_init(t_philo *ph, t_philo *phs);
 void				*scheduler(void *arg);
 long				timestamp(struct timeval before);
 void *first_meal(t_philo *phs, int* forks);
+int init_forks(t_philo *ph);
+int put_back_forks(t_philo *phs);
 #endif
