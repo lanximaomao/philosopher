@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+        */
+/*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 20:05:24 by linlinsun         #+#    #+#             */
-/*   Updated: 2023/03/27 00:06:11 by linlinsun        ###   ########.fr       */
+/*   Updated: 2023/03/27 11:17:34 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ typedef struct s_philo
 	int				is_eating;
 	int				is_thinking;
 	int				is_sleeping;
+	int				left;
+	int				right;
 	struct timeval	last_meal;
 	int*	forks;
 	pthread_mutex_t* mutex_forks;
