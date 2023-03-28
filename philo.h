@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 20:05:24 by linlinsun         #+#    #+#             */
-/*   Updated: 2023/03/27 11:17:34 by lsun             ###   ########.fr       */
+/*   Updated: 2023/03/28 19:20:10 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,15 @@
 # include <sys/time.h>
 # include <unistd.h>
 
+typedef struct s_arg
+{
+	int				num;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				must_eat;
+}					t_arg;
+
 typedef struct s_philo
 {
 	int				num;
@@ -26,30 +35,26 @@ typedef struct s_philo
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				must_eat;
+
 	int				thread_id;
 	int				meal_count;
 	int				is_alive;
-	int				is_eating;
-	int				is_thinking;
-	int				is_sleeping;
-	int				left;
-	int				right;
+	int				status;
+
 	struct timeval	last_meal;
-	int*	forks;
-	pthread_mutex_t* mutex_forks;
+
+	pthread_mutex_t	left;
+	pthread_mutex_t	right;
 }					t_philo;
 
-typedef struct s_info
-{
-	t_philo			*phs;
-}					t_info;
+//utils
 
-int					parsing(t_philo *ph, int argc, char **argv);
-int					ft_atoi(const char *str);
-int				philo_init(t_philo *ph, t_philo *phs);
-void				*scheduler(void *arg);
+int	ft_atoi_isnum(const char *str);
 long				timestamp(struct timeval before);
-void *first_meal(t_philo *phs, int* forks);
-int init_forks(t_philo *ph);
-int put_back_forks(t_philo *phs);
+
+//thread_function
+void				*monitor(void *arg);
+
+int					parsing(int argc, char **argv, t_arg *arg);
+int					init_philo(t_philo *ph, int argc, char **argv);
 #endif

@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 13:55:47 by lsun              #+#    #+#             */
-/*   Updated: 2023/03/27 12:40:54 by lsun             ###   ########.fr       */
+/*   Updated: 2023/03/28 19:28:26 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,175 +33,46 @@ gcc main.c ft_atoi.c  ft_itoa.c  ft_strlen.c ft_strncmp.c  ft_digit_num.c
 
 void* philo_needs_to_eat(void *arg)
 {
-	t_philo *phs;
-	struct timeval before;
-	long	elapsed_time;
+	//t_philo *ph;
+	//struct timeval before;
+	//long	elapsed_time;
 
-	phs = (t_philo*)arg;
-	gettimeofday(&before, NULL);
-	while (phs->meal_count < phs->must_eat)
-	{
-		if (phs->meal_count != 0 && phs->meal_count < phs->must_eat)
-		{
-			elapsed_time = timestamp(phs->last_meal);
-			if (elapsed_time > phs->time_to_die)
-			{
-				phs->is_alive = 0;
-				break;
-			}
-		}
-		printf("%ld philo %d is thinking.\n", timestamp(before), phs->thread_id);
-		scheduler((void*)phs); // ask for forks // if this returns null due to malloc fail?
-		printf("%ld philo %d has taken a fork.\n", timestamp(before), phs->thread_id);
-		if (phs->left == 1 && phs->right == 1)
-		{
-			printf("%ld philo %d is eating.\n", timestamp(before), phs->thread_id);
-			usleep(phs->time_to_eat * 1000);
-			gettimeofday(&(phs->last_meal), NULL);
-			put_back_forks(phs); //put back forks
-		}
-		phs->meal_count++;
-		usleep(phs->time_to_sleep * 1000);
-		printf("%ld philo %d is sleeping.\n", timestamp(before), phs->thread_id);
-	}
-	return (0);
-}
-
-int put_back_forks(t_philo *phs)
-{
-	return (1);
-}
-
-//how to make sure ever philo can get two forks after calling this function?
-void* scheduler(void *arg)
-{
-	t_philo *phs;
-	pthread_mutex_t mutex_left_forks;
-	pthread_mutex_t mutex_right_forks;
-
-	phs = (t_philo*)arg;
-	if(phs->thread_id == phs->num + 1)
-	{
-		printf("hello from scheduler %d and I have all the forks.\n", phs->thread_id);
-		return(NULL);
-	}
-	pthread_mutex_init(&mutex_left_forks, NULL);
-	pthread_mutex_lock(&mutex_left_forks);
-	printf("philo %d checked fork condition is %d-%d\n", phs->thread_id, phs->forks[0], phs->forks[1]);
-	//first_meal(phs, phs->forks); 	// call first meal function
-
-	if(phs->thread_id != phs->num + 1 && phs->thread_id % 2 == 0 )
-	{
-		printf("I am philo %d and I can eat first.\n", phs->thread_id);
-		//first get my left fork
-		if (phs->forks[phs->thread_id - 1] == phs->num + 1)
-		{
-			phs->forks[phs->thread_id - 1] = phs->thread_id;
-			phs->left = 1;
-		}
-
-		//then get my right fork
-		if (phs->forks[phs->thread_id] == phs->num + 1 && phs->thread_id != phs->num)
-		{
-			phs->forks[phs->thread_id] = phs->thread_id;
-			phs->right =  1;
-		}
-		else if (phs->forks[0] == phs->num + 1)
-		{
-			phs->forks[0] = phs->thread_id;
-			phs->right = 1;
-		}
-	}
-	pthread_mutex_unlock(&mutex_left_forks);
-	//right
-	pthread_mutex_init(&mutex_right_forks, NULL);
-	pthread_mutex_lock(&mutex_right_forks);
-	if(phs->thread_id != phs->num + 1 && phs->thread_id % 2 != 0 )
-	{
-		printf("I am philo %d and I need to wait.\n", phs->thread_id);
-		//first get my right fork
-		if (phs->forks[phs->thread_id] == phs->num + 1 && phs->thread_id != phs->num)
-			phs->forks[phs->thread_id] = phs->thread_id;
-		else if (phs->forks[0] == phs->num + 1)
-			phs->forks[0] = phs->thread_id;
-		//then get my left fork
-		phs->forks[phs->thread_id - 1] = phs->thread_id;
-	}
-	printf("philo %d my fork condition after first meal is %d-%d\n", phs->thread_id, phs->forks[0], phs->forks[1]);
-	pthread_mutex_unlock(&mutex_right_forks);
-	while (phs->left != 1 || phs->right )
-	{
-		/* code */
-	}
-
+	//ph = (t_philo*)arg;
+	//gettimeofday(&before, NULL);
 	return (NULL);
 }
 
-//int get_left_fork(t_philo *phs)
-//{
+void* monitor(void *arg)
+{
+	return(NULL);
+}
 
-//}
-
-
-//int get_right_fork(t_philo *phs)
-//{
-
-//}
-
-//void *first_meal(t_philo *phs, int* forks)
-//{
-//	printf("this is my first meal.\n");
-//	if(phs->thread_id != phs->num + 1 && phs->thread_id % 2 == 0 )
-//	{
-//		printf("I am philo %d and I can eat first.\n", phs->thread_id);
-//		//first get my left fork
-//		if (forks[phs->thread_id - 1] == phs->num + 1)
-//			forks[phs->thread_id - 1] = phs->thread_id;
-//		//then get my right fork
-//		if (forks[phs->thread_id] == phs->num + 1 && phs->thread_id != phs->num)
-//			forks[phs->thread_id] = phs->thread_id;
-//		else if (forks[0] == phs->num + 1)
-//			forks[0] = phs->thread_id;
-//	}
-//	else if(phs->thread_id != phs->num + 1 && phs->thread_id % 2 != 0 )
-//	{
-//		printf("I am philo %d and I need to wait.\n", phs->thread_id);
-//		//first get my right fork
-//		if (forks[phs->thread_id] == phs->num + 1 && phs->thread_id != phs->num)
-//			forks[phs->thread_id] = phs->thread_id;
-//		else if (forks[0] == phs->num + 1)
-//			forks[0] = phs->thread_id;
-//		//then get my left fork
-//		forks[phs->thread_id - 1] = phs->thread_id;
-//	}
-//	return(NULL);
-//}
-
-int init_threads(t_philo *phs)
+int init_threads(t_philo *ph)
 {
 	int i;
-	pthread_t philo[phs->num + 1];
+	pthread_t ph_thread[5];
 
 	i = 0;
-	while (i < phs->num + 1)
+	//printf("%d\n", ph[i].num); --> why this is not working?
+	while (i < 5)
 	{
-		if (i < phs->num && pthread_create(&philo[i], NULL, &philo_needs_to_eat, (void*)(phs)) != 0)
+		if (i < 4 && pthread_create(&ph_thread[i], NULL, &philo_needs_to_eat, (void*)(ph)) != 0)
 		{
 			printf("error in creating threads.\n");
 			return(0);
 		}
-		else if (i == phs->num && pthread_create(&philo[i], NULL, &scheduler, (void*)(phs)) != 0)
+		else if (i == 4 && pthread_create(&ph_thread[i], NULL, &monitor, (void*)(ph)) != 0)
 		{
 			printf("error in creating threads.\n");
 			return(0);
 		}
 		i++;
-		phs++;
+		ph++;
 	}
 	i = 0;
-	while (i < phs->num + 1)
+	while (i < 5)
 	{
-		if (pthread_join(philo[i], NULL) != 0)
+		if (pthread_join(ph_thread[i], NULL) != 0)
 		{
 			printf("error in joining threads.");
 			return(0);
@@ -211,29 +82,94 @@ int init_threads(t_philo *phs)
 	return(1);
 }
 
+int init_philo(t_philo *ph, int argc, char** argv)
+{
+	int i;
+	t_arg	*arg;
+	pthread_mutex_t *mutex_forks;
+
+	if (argc < 4 || argc > 5)
+	{
+		printf("wrong number of arguments.\n");
+		return (0);
+	}
+	arg = malloc(sizeof(t_arg) *  1); // remember to free
+	if (!arg)
+		return (0);
+	if (parsing(argc, argv, arg) == 0)
+		return (0);
+	printf("\n\nphilo = %d\ntime_to_die = %d\ntime_to_eat = %d\ntime_to_sleep = %d\nmust_eat = %d\n\n\n", arg->num, arg->time_to_die, arg->time_to_eat, arg->time_to_sleep, arg->must_eat);
+	ph = malloc(sizeof(t_philo) * arg->num); // remember to free
+	if (!ph)
+		return (0);
+	mutex_forks = malloc(sizeof(pthread_mutex_t) * arg->num); // TO BE FREE
+	if (!mutex_forks)
+		return (0);
+	i = 0;
+	while (i < arg->num)
+	{
+		ph[i].num = arg->num;
+		ph[i].time_to_die = arg->time_to_die;
+		ph[i].time_to_eat = arg->time_to_eat;
+		ph[i].time_to_sleep = arg->time_to_sleep;
+		ph[i].must_eat = arg->must_eat;
+		ph[i].thread_id = i + 1;
+		ph[i].left = mutex_forks[(i + 1) % arg->num];
+		ph[i].right = mutex_forks[i];
+		ph[i].meal_count = 0;
+		ph[i].is_alive = 1;
+		ph[i].status = 0;
+		i++;
+	}
+	free(arg);
+	return(1);
+}
+
+int parsing(int argc, char** argv, t_arg *arg)
+{
+	arg->num = ft_atoi_isnum(argv[0]);
+	arg->time_to_die = ft_atoi_isnum(argv[1]);
+	arg->time_to_eat = ft_atoi_isnum(argv[2]);
+	arg->time_to_sleep = ft_atoi_isnum(argv[3]);
+	if (argc == 5)
+		arg->must_eat = ft_atoi_isnum(argv[4]);
+	if (arg->num <= 0 || arg->time_to_die <= 0 || arg->time_to_eat < 0 || arg->time_to_sleep < 0 || arg->must_eat <= 0)
+	{
+		if (arg->num == 0)
+			printf("Are you sure to start the game without any philos?\n");
+		if (arg->time_to_die == 0)
+			printf("Time to die is zero. Very sad, I died immediately.\n");
+		if (arg->must_eat == 0)
+			printf("Must eat is zero. I am good, no more eating. Thanks!\n");
+		else
+			printf("wrong input.\n");
+		return (0);
+	}
+	if (argc == 4)
+		arg->must_eat = -1;
+	return(1);
+}
+
 int main(int argc, char** argv)
 {
 	int i;
+	int num;
 	t_philo *ph;
-	t_philo *phs;
 
-	ph = malloc(sizeof(t_philo) * 1); //free
-	if (!ph)
-		return (1);
-	if (parsing(ph, --argc, ++argv) == 0 )
-		return (2);
-	printf("philo = %d\ntime_to_die = %d\ntime_to_eat = %d\ntime_to_sleep = %d\nmust_eat = %d\n\n\n", ph->num, ph->time_to_die, ph->time_to_eat, ph->time_to_sleep, ph->must_eat);
-	// creating multiple philos
-	phs = malloc(sizeof(t_philo) * (ph->num + 1));
-	philo_init(ph, phs);
-	//creating multiple threads
-	if (init_threads(phs) == 0)
-		return (3);
-
-	while (1)
+	if (init_philo(ph, --argc, ++argv) == 1)
 	{
-		//check if any philo died;
+		//printf("philo = %d\ntime_to_die = %d\ntime_to_eat = %d\ntime_to_sleep = %d\nmust_eat = %d\n\n\n", ph->num, ph->time_to_die, ph->time_to_eat, ph->time_to_sleep, ph->must_eat);
+		if (init_threads(ph) != 0)
+		{
+			free(ph);
+			return(0);
+		}
+		else
+		{
+			// if one thread fail, what should we do?
+			free(ph);
+			return(3);
+		}
 	}
-
 	return(0);
 }
