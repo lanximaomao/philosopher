@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 20:05:24 by linlinsun         #+#    #+#             */
-/*   Updated: 2023/03/28 19:20:10 by lsun             ###   ########.fr       */
+/*   Updated: 2023/03/28 23:54:29 by linlinsun        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,9 @@ long				timestamp(struct timeval before);
 void				*monitor(void *arg);
 
 int					parsing(int argc, char **argv, t_arg *arg);
-int					init_philo(t_philo *ph, int argc, char **argv);
+
+int init_philo(int argc, char** argv);
+void philo_assignment(t_philo *ph, t_arg *arg, pthread_mutex_t *mutex_forks);
+void* philo_needs_to_eat(void *arg);
+void* monitor(void *arg);
 #endif
