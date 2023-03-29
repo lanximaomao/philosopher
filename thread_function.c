@@ -13,14 +13,17 @@ void* philo_needs_to_eat(void *arg)
 	{
 		while (ph->meal_count < ph->must_eat)
 		{
+			//printf("%lu %d is thinking.\n", timestamp(before), ph->thread_id);
 			pthread_mutex_lock(&ph->left);
-			printf("%lu philo %d took a left fork.\n", timestamp(before), ph->thread_id);
+			printf("%lu %d has taken a left fork.\n", timestamp(before), ph->thread_id);
 			pthread_mutex_lock(&ph->right);
-			printf("%lu philo %d took a right fork.\n", timestamp(before), ph->thread_id);
-			printf("%lu philo %d is eating.\n", timestamp(before), ph->thread_id);
-			usleep(ph->time_to_eat);
+			printf("%lu %d has taken a right fork.\n", timestamp(before), ph->thread_id);
+			printf("%lu %d is eating.\n", timestamp(before), ph->thread_id);
+			usleep(ph->time_to_eat * 1000);
 			pthread_mutex_unlock(&ph->right);
 			pthread_mutex_unlock(&ph->left);
+			usleep(ph->time_to_sleep * 1000);
+			printf("%lu %d is sleeping.\n", timestamp(before), ph->thread_id);
 			if (ph->must_eat != -1)
 				ph->meal_count++;
 		}
@@ -29,13 +32,17 @@ void* philo_needs_to_eat(void *arg)
 	{
 		while (ph->meal_count < ph->must_eat)
 		{
-			usleep(ph->time_to_eat/2);
-			pthread_mutex_lock(&ph->right);
-			printf("%lu philo %d took a left fork.\n", timestamp(before), ph->thread_id);
+			//printf("%lu %d is thinking.\n", timestamp(before), ph->thread_id);
+			usleep(ph->time_to_eat * 1000);
 			pthread_mutex_lock(&ph->left);
-			printf("%lu philo %d is eating.\n", timestamp(before), ph->thread_id);
-			pthread_mutex_unlock(&ph->left);
+			printf("%lu %d has taken a right fork.\n", timestamp(before), ph->thread_id);
+			pthread_mutex_lock(&ph->right);
+			printf("%lu %d has taken a left fork.\n", timestamp(before), ph->thread_id);
+			printf("%lu %d is eating.\n", timestamp(before), ph->thread_id);
 			pthread_mutex_unlock(&ph->right);
+			pthread_mutex_unlock(&ph->left);
+			usleep(ph->time_to_sleep * 1000);
+			printf("%lu %d is sleeping.\n", timestamp(before), ph->thread_id);
 			if (ph->must_eat != -1)
 				ph->meal_count++;
 		}
