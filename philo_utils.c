@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 09:37:32 by lsun              #+#    #+#             */
-/*   Updated: 2023/03/28 17:40:17 by lsun             ###   ########.fr       */
+/*   Updated: 2023/03/29 12:07:50 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,16 @@ long timestamp(struct  timeval before)
 	gettimeofday(&after, NULL);
 	timestamp = (after.tv_sec - before.tv_sec) * 1000 + (after.tv_usec - before.tv_usec)/1000;
 	return(timestamp);
+}
+
+void ft_usleep(int useconds)
+{
+	while (useconds - 500 > 0)
+	{
+		usleep(500);
+		useconds -= 500;
+	}
+	usleep(useconds);
 }
 
 // one second = 1,000,000 microseconds

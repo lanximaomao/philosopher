@@ -12,12 +12,12 @@ void* philo_needs_to_eat(void *arg)
 	if (ph->thread_id % 2 == 0)
 	{
 		printf("%lu philo %d and I can eat first.\n", timestamp(before), ph->thread_id);
-		sleep(4);
 	}
 	else
 	{
+		usleep(1000000);
+		//ft_usleep(1000000);
 		printf("%lu philo %d and I will wait first.\n", timestamp(before), ph->thread_id);
-		sleep(5);
 	}
 	return (NULL);
 }

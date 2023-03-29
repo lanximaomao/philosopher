@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+        */
+/*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 13:55:47 by lsun              #+#    #+#             */
-/*   Updated: 2023/03/29 00:52:11 by linlinsun        ###   ########.fr       */
+/*   Updated: 2023/03/29 11:37:43 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,17 @@ gcc main.c ft_atoi.c  ft_itoa.c  ft_strlen.c ft_strncmp.c  ft_digit_num.c
 int init_threads(t_philo *ph)
 {
 	int i;
+	int total_thread_num;
 	pthread_t ph_thread[ph[0].num + 1];
 
-	printf("\n\ntotal thread number is %d\n\n", ph[0].num + 1);
+	total_thread_num =  ph[0].num + 1;
 	if (pthread_create(&ph_thread[0], NULL, &monitor, (void*)(ph)) != 0)
 	{
 		printf("error in creating threads.\n");
 		return(0);
 	}
 	i = 1;
-	while (i++ <= ph[0].num)
+	while (i < total_thread_num)
 	{
 		if (pthread_create(&ph_thread[i], NULL, &philo_needs_to_eat, (void*)(ph)) != 0)
 		{
@@ -49,13 +50,14 @@ int init_threads(t_philo *ph)
 			return(0);
 		}
 		ph++;
+		i++;
 	}
 	i = 0;
-	while (i < ph[0].num + 1)
+	while (i < total_thread_num)
 	{
 		if (pthread_join(ph_thread[i], NULL) != 0)
 		{
-			printf("error in joining threads.");
+			printf("error in joining threads.\n");
 			return(0);
 		}
 		i++;
