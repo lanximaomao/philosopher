@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 09:37:32 by lsun              #+#    #+#             */
-/*   Updated: 2023/03/29 12:07:50 by lsun             ###   ########.fr       */
+/*   Updated: 2023/03/30 20:23:52 by linlinsun        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,14 +52,19 @@ long timestamp(struct  timeval before)
 	return(timestamp);
 }
 
-void ft_usleep(int useconds)
+void ft_usleep(int mseconds)
 {
-	while (useconds - 500 > 0)
+	struct timeval time;
+	//unsigned long long	end;
+
+	gettimeofday(&time, NULL);
+	//end = mseconds * 1000;
+	while (timestamp(time) < mseconds)
 	{
-		usleep(500);
-		useconds -= 500;
+		usleep(1);
+		//end -= 500;
 	}
-	usleep(useconds);
+	//usleep(end);
 }
 
 // one second = 1,000,000 microseconds
