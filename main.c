@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 13:55:47 by lsun              #+#    #+#             */
-/*   Updated: 2023/03/30 11:46:07 by lsun             ###   ########.fr       */
+/*   Updated: 2023/03/30 14:26:04 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,11 @@ int init_philo(int argc, char** argv)
 		return (0);
 	if (parsing(argc, argv, arg) == 0)
 		return (0);
+	if (arg->num == 1)
+	{
+		usleep(arg->time_to_die);
+		return (-1);
+	}
 	ph = malloc(sizeof(t_philo) * arg->num); // remember to free
 	if (!ph)
 		return (0);
@@ -181,14 +186,17 @@ int parsing(int argc, char** argv, t_arg *arg)
 
 int main(int argc, char** argv)
 {
+	int ret;
+
 	if (argc < 5 || argc > 6)
 	{
 		printf("wrong number of arguments.\n");
 		return (0);
 	}
-	if (init_philo(--argc, ++argv) == 0)
-	{
+	ret = init_philo(--argc, ++argv);
+	if (ret == 0)
 		printf("something goes wrong.\n");
-	}
+	if (ret == -1)
+		printf("0 philo 1 died\n");
 	return(0);
 }
