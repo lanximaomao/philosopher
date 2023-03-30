@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 13:55:47 by lsun              #+#    #+#             */
-/*   Updated: 2023/03/29 11:37:43 by lsun             ###   ########.fr       */
+/*   Updated: 2023/03/30 11:46:07 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,31 +29,43 @@ gcc main.c ft_atoi.c  ft_itoa.c  ft_strlen.c ft_strncmp.c  ft_digit_num.c
 
 #include "philo.h"
 
+void init_forks(int* forks, int philo_num)
+{
+	int i;
+
+	i = 0;
+	while (i < philo_num)
+	{
+		forks[i] = 0;
+		printf("my fork condition is %d\n", forks[i]);
+		i++;
+	}
+}
+
 int init_threads(t_philo *ph)
 {
 	int i;
-	int total_thread_num;
+	int philo_num;
 	pthread_t ph_thread[ph[0].num + 1];
 
-	total_thread_num =  ph[0].num + 1;
+	philo_num =  ph[0].num;
 	if (pthread_create(&ph_thread[0], NULL, &monitor, (void*)(ph)) != 0)
 	{
 		printf("error in creating threads.\n");
 		return(0);
 	}
-	i = 1;
-	while (i < total_thread_num)
+	i = 0;
+	while (i < philo_num)
 	{
-		if (pthread_create(&ph_thread[i], NULL, &philo_needs_to_eat, (void*)(ph)) != 0)
+		if (pthread_create(&ph_thread[i + 1], NULL, &philo_needs_to_eat, (void*)(&ph[i])) != 0)
 		{
 			printf("error in creating threads.\n");
 			return(0);
 		}
-		ph++;
 		i++;
 	}
 	i = 0;
-	while (i < total_thread_num)
+	while (i < philo_num + 1) // join also the monitoring thread
 	{
 		if (pthread_join(ph_thread[i], NULL) != 0)
 		{
@@ -69,6 +81,7 @@ int init_philo(int argc, char** argv)
 {
 	t_arg	*arg;
 	t_philo *ph;
+	int* forks;
 	pthread_mutex_t *mutex_forks;
 
 	arg = malloc(sizeof(t_arg) *  1); // remember to free
@@ -82,7 +95,12 @@ int init_philo(int argc, char** argv)
 	mutex_forks = malloc(sizeof(pthread_mutex_t) * arg->num); // TO BE FREE
 	if (!mutex_forks)
 		return (0);
-	philo_assignment(ph, arg, mutex_forks);
+	forks = malloc(sizeof(int) * arg->num);
+	if (!forks)
+		return(0);
+	init_forks(forks, arg->num);
+	int_mutex_forks(mutex_forks, arg->num);
+	philo_assignment(ph, arg, forks, mutex_forks);
 	//printf("\n\nphilo = %d\ntime_to_die = %d\ntime_to_eat = %d\ntime_to_sleep = %d\nmust_eat = %d\n\n\n", arg->num, arg->time_to_die, arg->time_to_eat, arg->time_to_sleep, arg->must_eat);
 	free(arg);
 	if (init_threads(ph) == 0)
@@ -90,7 +108,19 @@ int init_philo(int argc, char** argv)
 	return(1);
 }
 
-void philo_assignment(t_philo *ph, t_arg *arg, pthread_mutex_t *mutex_forks)
+void int_mutex_forks(pthread_mutex_t *mutex_forks, int philo_num)
+{
+	int i;
+
+	i = 0;
+	while (i < philo_num)
+	{
+		pthread_mutex_init(&mutex_forks[i], NULL);
+		i++;
+	}
+}
+
+void philo_assignment(t_philo *ph, t_arg *arg, int* forks, pthread_mutex_t *mutex_forks)
 {
 	int i;
 
@@ -103,11 +133,15 @@ void philo_assignment(t_philo *ph, t_arg *arg, pthread_mutex_t *mutex_forks)
 		ph[i].time_to_sleep = arg->time_to_sleep;
 		ph[i].must_eat = arg->must_eat;
 		ph[i].thread_id = i + 1;
-		ph[i].left = mutex_forks[(i + 1) % arg->num];
-		ph[i].right = mutex_forks[i];
+		ph[i].mutex_left = &mutex_forks[(i + 1) % arg->num];
+		ph[i].mutex_right = &mutex_forks[i];
 		ph[i].meal_count = 0;
 		ph[i].is_alive = 1;
 		ph[i].status = 0;
+		ph[i].fork_left = &forks[(i+1) % arg->num];
+		printf("my left fork address  = %p\n", ph[i].fork_left);
+		ph[i].fork_right = &forks[i];
+		printf("my right fork address = %p\n", ph[i].fork_right);
 		i++;
 	}
 }

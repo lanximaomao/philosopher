@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 20:05:24 by linlinsun         #+#    #+#             */
-/*   Updated: 2023/03/29 12:04:09 by lsun             ###   ########.fr       */
+/*   Updated: 2023/03/30 11:46:25 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,17 @@ typedef struct s_philo
 	int				status;
 
 	struct timeval	last_meal;
-
-	pthread_mutex_t	left;
-	pthread_mutex_t	right;
+	int				*fork_left;
+	int				*fork_right;
+	pthread_mutex_t	*mutex_left;
+	pthread_mutex_t	*mutex_right;
 }					t_philo;
 
 //utils
 
 int	ft_atoi_isnum(const char *str);
 long				timestamp(struct timeval before);
+void init_forks(int* forks, int philo_num);
 void ft_usleep(int useconds);
 
 //thread_function
@@ -59,7 +61,8 @@ void				*monitor(void *arg);
 int					parsing(int argc, char **argv, t_arg *arg);
 
 int init_philo(int argc, char** argv);
-void philo_assignment(t_philo *ph, t_arg *arg, pthread_mutex_t *mutex_forks);
+void philo_assignment(t_philo *ph, t_arg *arg, int* forks, pthread_mutex_t *mutex_forks);
 void* philo_needs_to_eat(void *arg);
 void* monitor(void *arg);
+void int_mutex_forks(pthread_mutex_t *mutex_forks, int philo_num);
 #endif
