@@ -6,7 +6,7 @@
 /*   By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 09:37:32 by lsun              #+#    #+#             */
-/*   Updated: 2023/03/30 20:23:52 by linlinsun        ###   ########.fr       */
+/*   Updated: 2023/03/31 13:05:13 by linlinsun        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,24 +42,32 @@ int	ft_atoi_isnum(const char *str)
 	return (result * sign);
 }
 
-long timestamp(struct  timeval before)
+unsigned long long timestamp(unsigned long long start)
 {
-	long timestamp;
-	struct timeval after;
+	unsigned long long current_time;
 
-	gettimeofday(&after, NULL);
-	timestamp = (after.tv_sec - before.tv_sec) * 1000 + (after.tv_usec - before.tv_usec)/1000;
-	return(timestamp);
+	current_time = get_current_time();
+	//printf("current_time is %llu\n", current_time);
+	//printf("timestamp %llu\n", current_time - start);
+	return(current_time - start);
+}
+
+/* get current time in ms */
+unsigned long long get_current_time()
+{
+	struct timeval time;
+
+	gettimeofday(&time, NULL);
+	return(time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
 void ft_usleep(int mseconds)
 {
-	struct timeval time;
-	//unsigned long long	end;
+	unsigned long long	current_time;
 
-	gettimeofday(&time, NULL);
+	current_time = get_current_time();
 	//end = mseconds * 1000;
-	while (timestamp(time) < mseconds)
+	while (timestamp(current_time) < mseconds)
 	{
 		usleep(1);
 		//end -= 500;

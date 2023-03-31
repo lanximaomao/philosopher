@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 20:05:24 by linlinsun         #+#    #+#             */
-/*   Updated: 2023/03/30 11:46:25 by lsun             ###   ########.fr       */
+/*   Updated: 2023/03/31 13:45:23 by linlinsun        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,9 @@ typedef struct s_philo
 	int				is_alive;
 	int				status;
 
-	struct timeval	last_meal;
+	unsigned long long	previous_meal;
+	unsigned long long	last_meal;
+	unsigned long long	start;
 	int				*fork_left;
 	int				*fork_right;
 	pthread_mutex_t	*mutex_left;
@@ -51,7 +53,7 @@ typedef struct s_philo
 //utils
 
 int	ft_atoi_isnum(const char *str);
-long				timestamp(struct timeval before);
+unsigned long long timestamp(unsigned long long start);
 void init_forks(int* forks, int philo_num);
 void ft_usleep(int useconds);
 
@@ -63,6 +65,8 @@ int					parsing(int argc, char **argv, t_arg *arg);
 int init_philo(int argc, char** argv);
 void philo_assignment(t_philo *ph, t_arg *arg, int* forks, pthread_mutex_t *mutex_forks);
 void* philo_needs_to_eat(void *arg);
-void* monitor(void *arg);
+void* vital_monitor(void *arg);
+void death_announcement (unsigned long long time_of_death, int thread_id);
 void int_mutex_forks(pthread_mutex_t *mutex_forks, int philo_num);
+unsigned long long get_current_time();
 #endif

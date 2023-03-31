@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 13:55:47 by lsun              #+#    #+#             */
-/*   Updated: 2023/03/30 14:26:04 by lsun             ###   ########.fr       */
+/*   Updated: 2023/03/31 13:47:20 by linlinsun        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void init_forks(int* forks, int philo_num)
 	while (i < philo_num)
 	{
 		forks[i] = 0;
-		printf("my fork condition is %d\n", forks[i]);
+		//printf("my fork condition is %d\n", forks[i]);
 		i++;
 	}
 }
@@ -49,7 +49,7 @@ int init_threads(t_philo *ph)
 	pthread_t ph_thread[ph[0].num + 1];
 
 	philo_num =  ph[0].num;
-	if (pthread_create(&ph_thread[0], NULL, &monitor, (void*)(ph)) != 0)
+	if (pthread_create(&ph_thread[0], NULL, &vital_monitor, (void*)(ph)) != 0)
 	{
 		printf("error in creating threads.\n");
 		return(0);
@@ -144,9 +144,12 @@ void philo_assignment(t_philo *ph, t_arg *arg, int* forks, pthread_mutex_t *mute
 		ph[i].is_alive = 1;
 		ph[i].status = 0;
 		ph[i].fork_left = &forks[(i+1) % arg->num];
-		printf("my left fork address  = %p\n", ph[i].fork_left);
+		//printf("my left fork address  = %p\n", ph[i].fork_left);
 		ph[i].fork_right = &forks[i];
-		printf("my right fork address = %p\n", ph[i].fork_right);
+		ph[i].start = get_current_time();
+		ph[i].last_meal = ph[i].start;
+		ph[i].previous_meal = ph[i].start;
+		//printf("my right fork address = %p\n", ph[i].fork_right);
 		i++;
 	}
 }
