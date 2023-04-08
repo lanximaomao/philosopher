@@ -9,7 +9,7 @@ void* philo_needs_to_eat(void *arg)
 	ph = (t_philo*)arg;
 	if (ph->thread_id % 2 != 0)
 		usleep(ph->time_to_eat);
-	while (ph->meal_count == -1 || ph->meal_count < ph->must_eat)
+	while (ph->meal_count < ph->must_eat)
 	{
 		if (ph->is_alive != 1)
 			break;
@@ -33,7 +33,6 @@ void* philo_needs_to_eat(void *arg)
 			break;
 		printf("%llu %d is sleeping\n", timestamp(ph->start), ph->thread_id);
 		usleep(ph->time_to_sleep * 1000);
-		if (ph->must_eat != -1)
 			ph->meal_count++;
 		if (ph->meal_count == ph->must_eat)
 			break;

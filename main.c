@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 13:55:47 by lsun              #+#    #+#             */
-/*   Updated: 2023/04/07 18:05:23 by lsun             ###   ########.fr       */
+/*   Updated: 2023/04/08 16:06:37 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,6 @@ gcc main.c ft_atoi.c  ft_itoa.c  ft_strlen.c ft_strncmp.c  ft_digit_num.c
 */
 
 #include "philo.h"
-
-void init_forks(int* forks, int philo_num)
-{
-	int i;
-
-	i = 0;
-	while (i < philo_num)
-	{
-		forks[i] = 0;
-		//printf("my fork condition is %d\n", forks[i]);
-		i++;
-	}
-}
 
 int init_threads(t_philo *ph)
 {
@@ -103,10 +90,8 @@ int init_philo(int argc, char** argv)
 	forks = malloc(sizeof(int) * arg->num);
 	if (!forks)
 		return(0);
-	init_forks(forks, arg->num);
 	int_mutex_forks(mutex_forks, arg->num);
 	philo_assignment(ph, arg, forks, mutex_forks);
-	//printf("\n\nphilo = %d\ntime_to_die = %d\ntime_to_eat = %d\ntime_to_sleep = %d\nmust_eat = %d\n\n\n", arg->num, arg->time_to_die, arg->time_to_eat, arg->time_to_sleep, arg->must_eat);
 	free(arg);
 	if (init_threads(ph) == 0)
 		return (0);
@@ -143,9 +128,8 @@ void philo_assignment(t_philo *ph, t_arg *arg, int* forks, pthread_mutex_t *mute
 		ph[i].meal_count = 0;
 		ph[i].is_alive = 1;
 		ph[i].status = 0;
-		ph[i].fork_left = &forks[(i+1) % arg->num];
-		//printf("my left fork address  = %p\n", ph[i].fork_left);
-		ph[i].fork_right = &forks[i];
+		//ph[i].fork_left = &forks[(i+1) % arg->num];
+		//ph[i].fork_right = &forks[i];
 		ph[i].start = get_current_time();
 		ph[i].last_meal = ph[i].start;
 		ph[i].previous_meal = ph[i].start;
@@ -171,7 +155,7 @@ int parsing(int argc, char** argv, t_arg *arg)
 			return (0);
 	}
 	else
-		arg->must_eat = -1;
+		arg->must_eat = 2147483647;
 	if (arg->num <= 0 || arg->time_to_die <= 0 || arg->time_to_eat < 0 || arg->time_to_sleep < 0)
 	{
 		if (arg->num == 0)
@@ -183,7 +167,7 @@ int parsing(int argc, char** argv, t_arg *arg)
 		return (0);
 	}
 	if (argc == 4)
-		arg->must_eat = -1;
+		arg->must_eat = 2147483647;
 	return(1);
 }
 
