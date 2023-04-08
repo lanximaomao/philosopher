@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+         #
+#    By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/27 14:37:25 by lsun              #+#    #+#              #
-#    Updated: 2023/03/29 00:14:34 by linlinsun        ###   ########.fr        #
+#    Updated: 2023/04/08 14:27:24 by lsun             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 
-SRC = main.c parsing.c philo_utils.c thread_function.c
+SRC = main.c philo_utils.c thread_function.c
 OBJ = $(SRC:.c=.o)
 #FLAGS = -Wall -Wextra -Werror
 
