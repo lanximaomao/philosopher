@@ -55,6 +55,7 @@ void* vital_monitor(void *arg)
 
 	i = 0;
 	j = 0;
+	count= 0;
 	ph = (t_philo*)arg;
 
 	usleep(ph[0].time_to_die);
@@ -69,7 +70,7 @@ void* vital_monitor(void *arg)
 		{
 			count++;
 			if (count == ph[i].num)
-				break;
+				return(NULL);
 		}
 		i++;
 		if (i >= ph[0].num)
