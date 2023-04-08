@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 16:59:33 by lsun              #+#    #+#             */
-/*   Updated: 2023/04/08 19:52:50 by lsun             ###   ########.fr       */
+/*   Updated: 2023/04/08 20:18:24 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	*philo_needs_to_eat(void *arg)
 	ph = (t_philo *)arg;
 	if (ph->thread_id % 2 != 0)
 		usleep(ph->time_to_eat);
+		//ft_usleep(ph->time_to_eat);
 	while (ph->meal_count < ph->must_eat)
 	{
 		if (ph->is_alive != 1)
@@ -32,6 +33,7 @@ void	*philo_needs_to_eat(void *arg)
 			break ;
 		printf("%llu %d is sleeping\n", timestamp(ph->start), ph->thread_id);
 		usleep(ph->time_to_sleep * 1000);
+		//ft_usleep(ph->time_to_sleep * 1000);
 		ph->meal_count++;
 		if (ph->meal_count == ph->must_eat)
 			break ;
@@ -51,6 +53,7 @@ int	eat_philo(t_philo *ph)
 		ph->previous_meal = ph->last_meal;
 		ph->last_meal = get_current_time();
 		usleep(ph->time_to_eat * 1000);
+		//ft_usleep(ph->time_to_eat * 1000);
 	}
 	else
 		return (0);
@@ -80,6 +83,7 @@ void	*vital_monitor(void *arg)
 	count = 0;
 	ph = (t_philo *)arg;
 	usleep(ph[0].time_to_die * 1000);
+	//ft_usleep(ph[0].time_to_die * 1000);
 	while (1)
 	{
 		if (ph[i].last_meal - ph[i].previous_meal >= ph[i].time_to_die)

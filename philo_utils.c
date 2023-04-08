@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 09:37:32 by lsun              #+#    #+#             */
-/*   Updated: 2023/04/08 17:23:44 by lsun             ###   ########.fr       */
+/*   Updated: 2023/04/08 20:16:00 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,12 @@ unsigned long long	get_current_time(void)
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
-void	ft_usleep(unsigned long long mseconds)
+void	ft_usleep(unsigned long long microseconds)
 {
 	unsigned long long	current_time;
 
-	current_time = get_current_time();
-	while (timestamp(current_time) < mseconds)
+	current_time = get_current_time() * 1000;
+	while (timestamp(current_time) < microseconds)
 	{
 		usleep(500);
 	}

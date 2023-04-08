@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 20:03:22 by lsun              #+#    #+#             */
-/*   Updated: 2023/04/08 20:03:24 by lsun             ###   ########.fr       */
+/*   Updated: 2023/04/08 20:04:27 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,28 @@
 */
 
 #include "philo.h"
+
+int	main(int argc, char **argv)
+{
+	int		ret;
+	t_arg	*arg;
+
+	if (argc < 5 || argc > 6)
+	{
+		printf("wrong number of arguments.\n");
+		return (0);
+	}
+	arg = malloc(sizeof(t_arg) * 1);
+	if (!arg)
+		return (0);
+	ret = init_philo(--argc, ++argv, arg);
+	if (ret == 0)
+		printf("something goes wrong.\n");
+	if (ret == -1)
+		printf("0 philo 1 died\n");
+	free(arg);
+	return (0);
+}
 
 int	init_philo(int argc, char **argv, t_arg *arg)
 {
@@ -78,26 +100,4 @@ void	philo_assignment(t_philo *ph, t_arg *arg, pthread_mutex_t *mutex_forks)
 		ph[i].previous_meal = ph[i].start;
 		i++;
 	}
-}
-
-int	main(int argc, char **argv)
-{
-	int		ret;
-	t_arg	*arg;
-
-	if (argc < 5 || argc > 6)
-	{
-		printf("wrong number of arguments.\n");
-		return (0);
-	}
-	arg = malloc(sizeof(t_arg) * 1);
-	if (!arg)
-		return (0);
-	ret = init_philo(--argc, ++argv, arg);
-	if (ret == 0)
-		printf("something goes wrong.\n");
-	if (ret == -1)
-		printf("0 philo 1 died\n");
-	free(arg);
-	return (0);
 }
