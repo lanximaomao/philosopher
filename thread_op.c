@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 19:56:51 by lsun              #+#    #+#             */
-/*   Updated: 2023/04/08 19:56:54 by lsun             ###   ########.fr       */
+/*   Updated: 2023/04/11 10:18:32 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	init_threads(t_philo *ph)
 		return (0);
 	if (join(ph_thread, philo_num) == 0)
 		return (0);
+	free(ph_thread);
 	return (1);
 }
 

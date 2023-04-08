@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 20:03:22 by lsun              #+#    #+#             */
-/*   Updated: 2023/04/08 20:04:27 by lsun             ###   ########.fr       */
+/*   Updated: 2023/04/11 10:16:43 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	init_philo(int argc, char **argv, t_arg *arg)
 	mutex_forks = malloc(sizeof(pthread_mutex_t) * arg->num);
 	if (!mutex_forks)
 		return (0);
-	int_mutex_forks(mutex_forks, arg->num);
+	init_mutex_forks(mutex_forks, arg->num);
 	philo_assignment(ph, arg, mutex_forks);
 	if (init_threads(ph) == 0)
 		return (0);
@@ -65,7 +65,7 @@ int	init_philo(int argc, char **argv, t_arg *arg)
 	return (1);
 }
 
-void	int_mutex_forks(pthread_mutex_t *mutex_forks, int philo_num)
+void	init_mutex_forks(pthread_mutex_t *mutex_forks, int philo_num)
 {
 	int	i;
 

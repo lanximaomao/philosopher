@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 20:05:24 by linlinsun         #+#    #+#             */
-/*   Updated: 2023/04/08 20:00:33 by lsun             ###   ########.fr       */
+/*   Updated: 2023/04/11 10:16:51 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,11 @@ typedef struct s_philo
 	int					meal_count;
 	int					is_alive;
 	int					status;
-	int					*fork_left;
-	int					*fork_right;
 	pthread_mutex_t		*mutex_left;
 	pthread_mutex_t		*mutex_right;
 }						t_philo;
 
 int						ft_atoi_isnum(const char *str);
-void					init_forks(int *forks, int philo_num);
 void					ft_usleep(unsigned long long mseconds);
 unsigned long long		timestamp(unsigned long long start);
 unsigned long long		get_current_time(void);
@@ -61,7 +58,7 @@ void					*philo_needs_to_eat(void *arg);
 void					*vital_monitor(void *arg);
 void					death_announcement(unsigned long long time_of_death,
 							int thread_id, t_philo *ph);
-void					int_mutex_forks(pthread_mutex_t *mutex_forks,
+void					init_mutex_forks(pthread_mutex_t *mutex_forks,
 							int philo_num);
 int						eat_philo(t_philo *ph);
 int						parsing_error(t_arg *arg);
