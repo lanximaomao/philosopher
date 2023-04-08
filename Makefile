@@ -6,15 +6,15 @@
 #    By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/27 14:37:25 by lsun              #+#    #+#              #
-#    Updated: 2023/04/08 14:27:24 by lsun             ###   ########.fr        #
+#    Updated: 2023/04/08 19:57:14 by lsun             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 
-SRC = main.c philo_utils.c thread_function.c
+SRC = main.c philo_utils.c parsing.c thread_op.c thread_function.c
 OBJ = $(SRC:.c=.o)
-#FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 
