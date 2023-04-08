@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 13:55:47 by lsun              #+#    #+#             */
-/*   Updated: 2023/04/08 16:59:21 by lsun             ###   ########.fr       */
+/*   Updated: 2023/04/08 19:29:48 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	init_threads(t_philo *ph)
 		i++;
 	}
 	i = 0;
-	while (i < philo_num + 1) // join also the monitoring thread
+	while (i < philo_num + 1)
 	{
 		if (pthread_join(ph_thread[i], NULL) != 0)
 		{
@@ -65,39 +65,30 @@ int	init_threads(t_philo *ph)
 	return (1);
 }
 
-int	init_philo(int argc, char **argv)
+int	init_philo(int argc, char **argv, t_arg *arg)
 {
-	t_arg			*arg;
 	t_philo			*ph;
 	pthread_mutex_t	*mutex_forks;
 
-	arg = malloc(sizeof(t_arg) * 1); // remember to free
-	if (!arg)
-		return (0);
 	if (parsing(argc, argv, arg) == 0)
-	{
-		free(arg);
 		return (0);
-	}
 	if (arg->num == 1)
 	{
-		usleep(arg->time_to_die);
-		free(arg);
+		usleep(arg->time_to_die * 1000);
 		return (-1);
 	}
-	ph = malloc(sizeof(t_philo) * arg->num); // remember to free
+	ph = malloc(sizeof(t_philo) * arg->num);
 	if (!ph)
 		return (0);
-	mutex_forks = malloc(sizeof(pthread_mutex_t) * arg->num); // TO BE FREE
+	mutex_forks = malloc(sizeof(pthread_mutex_t) * arg->num);
 	if (!mutex_forks)
 		return (0);
 	int_mutex_forks(mutex_forks, arg->num);
 	philo_assignment(ph, arg, mutex_forks);
-	free(arg);
 	if (init_threads(ph) == 0)
 		return (0);
-	free(ph);
 	free(mutex_forks);
+	free(ph);
 	return (1);
 }
 
@@ -156,6 +147,15 @@ int	parsing(int argc, char **argv, t_arg *arg)
 	}
 	else
 		arg->must_eat = 2147483647;
+	if (parsing_error(arg) == 0)
+		return (0);
+	if (argc == 4)
+		arg->must_eat = 2147483647;
+	return (1);
+}
+
+int	parsing_error(t_arg *arg)
+{
 	if (arg->num <= 0 || arg->time_to_die <= 0 || arg->time_to_eat < 0
 		|| arg->time_to_sleep < 0)
 	{
@@ -167,24 +167,27 @@ int	parsing(int argc, char **argv, t_arg *arg)
 			printf("wrong input.\n");
 		return (0);
 	}
-	if (argc == 4)
-		arg->must_eat = 2147483647;
 	return (1);
 }
 
 int	main(int argc, char **argv)
 {
-	int	ret;
+	int		ret;
+	t_arg	*arg;
 
 	if (argc < 5 || argc > 6)
 	{
 		printf("wrong number of arguments.\n");
 		return (0);
 	}
-	ret = init_philo(--argc, ++argv);
+	arg = malloc(sizeof(t_arg) * 1);
+	if (!arg)
+		return (0);
+	ret = init_philo(--argc, ++argv, arg);
 	if (ret == 0)
 		printf("something goes wrong.\n");
 	if (ret == -1)
 		printf("0 philo 1 died\n");
+	free(arg);
 	return (0);
 }

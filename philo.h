@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 20:05:24 by linlinsun         #+#    #+#             */
-/*   Updated: 2023/04/08 17:01:35 by lsun             ###   ########.fr       */
+/*   Updated: 2023/04/08 19:29:17 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,16 @@ unsigned long long		timestamp(unsigned long long start);
 
 //thread_function
 int						parsing(int argc, char **argv, t_arg *arg);
-int						init_philo(int argc, char **argv);
+int	init_philo(int argc, char **argv, t_arg *arg);
 void					philo_assignment(t_philo *ph, t_arg *arg,
 							pthread_mutex_t *mutex_forks);
 void					*philo_needs_to_eat(void *arg);
 void					*vital_monitor(void *arg);
 void					death_announcement(unsigned long long time_of_death,
-							int thread_id);
+							int thread_id, t_philo *ph);
 void					int_mutex_forks(pthread_mutex_t *mutex_forks,
 							int philo_num);
 unsigned long long		get_current_time(void);
+int eat_philo(t_philo *ph);
+int parsing_error(t_arg *arg);
 #endif

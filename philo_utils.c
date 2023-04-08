@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 09:37:32 by lsun              #+#    #+#             */
-/*   Updated: 2023/04/08 17:03:30 by lsun             ###   ########.fr       */
+/*   Updated: 2023/04/08 17:23:44 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,6 @@ void	ft_usleep(unsigned long long mseconds)
 	current_time = get_current_time();
 	while (timestamp(current_time) < mseconds)
 	{
-		usleep(1);
+		usleep(500);
 	}
 }
