@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+        */
+/*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 20:05:24 by linlinsun         #+#    #+#             */
-/*   Updated: 2023/03/31 13:45:23 by linlinsun        ###   ########.fr       */
+/*   Updated: 2023/04/08 16:14:25 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void				*monitor(void *arg);
 int					parsing(int argc, char **argv, t_arg *arg);
 
 int init_philo(int argc, char** argv);
-void philo_assignment(t_philo *ph, t_arg *arg, int* forks, pthread_mutex_t *mutex_forks);
+void philo_assignment(t_philo *ph, t_arg *arg, pthread_mutex_t *mutex_forks);
 void* philo_needs_to_eat(void *arg);
 void* vital_monitor(void *arg);
 void death_announcement (unsigned long long time_of_death, int thread_id);

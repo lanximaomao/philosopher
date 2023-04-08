@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 13:55:47 by lsun              #+#    #+#             */
-/*   Updated: 2023/04/08 16:06:37 by lsun             ###   ########.fr       */
+/*   Updated: 2023/04/08 16:18:25 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,17 +68,21 @@ int init_philo(int argc, char** argv)
 {
 	t_arg	*arg;
 	t_philo *ph;
-	int* forks;
 	pthread_mutex_t *mutex_forks;
 
 	arg = malloc(sizeof(t_arg) *  1); // remember to free
 	if (!arg)
 		return (0);
 	if (parsing(argc, argv, arg) == 0)
+	{
+		free(arg);
 		return (0);
+	}
+
 	if (arg->num == 1)
 	{
 		usleep(arg->time_to_die);
+		free(arg);
 		return (-1);
 	}
 	ph = malloc(sizeof(t_philo) * arg->num); // remember to free
@@ -87,14 +91,13 @@ int init_philo(int argc, char** argv)
 	mutex_forks = malloc(sizeof(pthread_mutex_t) * arg->num); // TO BE FREE
 	if (!mutex_forks)
 		return (0);
-	forks = malloc(sizeof(int) * arg->num);
-	if (!forks)
-		return(0);
 	int_mutex_forks(mutex_forks, arg->num);
-	philo_assignment(ph, arg, forks, mutex_forks);
+	philo_assignment(ph, arg, mutex_forks);
 	free(arg);
 	if (init_threads(ph) == 0)
 		return (0);
+	free(ph);
+	free(mutex_forks);
 	return(1);
 }
 
@@ -110,7 +113,7 @@ void int_mutex_forks(pthread_mutex_t *mutex_forks, int philo_num)
 	}
 }
 
-void philo_assignment(t_philo *ph, t_arg *arg, int* forks, pthread_mutex_t *mutex_forks)
+void philo_assignment(t_philo *ph, t_arg *arg, pthread_mutex_t *mutex_forks)
 {
 	int i;
 
@@ -128,12 +131,9 @@ void philo_assignment(t_philo *ph, t_arg *arg, int* forks, pthread_mutex_t *mute
 		ph[i].meal_count = 0;
 		ph[i].is_alive = 1;
 		ph[i].status = 0;
-		//ph[i].fork_left = &forks[(i+1) % arg->num];
-		//ph[i].fork_right = &forks[i];
 		ph[i].start = get_current_time();
 		ph[i].last_meal = ph[i].start;
 		ph[i].previous_meal = ph[i].start;
-		//printf("my right fork address = %p\n", ph[i].fork_right);
 		i++;
 	}
 }
