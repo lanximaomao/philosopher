@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 13:55:47 by lsun              #+#    #+#             */
-/*   Updated: 2023/04/08 16:18:25 by lsun             ###   ########.fr       */
+/*   Updated: 2023/04/08 16:59:21 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,25 +29,26 @@ gcc main.c ft_atoi.c  ft_itoa.c  ft_strlen.c ft_strncmp.c  ft_digit_num.c
 
 #include "philo.h"
 
-int init_threads(t_philo *ph)
+int	init_threads(t_philo *ph)
 {
-	int i;
-	int philo_num;
-	pthread_t ph_thread[ph[0].num + 1];
+	int			i;
+	int			philo_num;
+	pthread_t	ph_thread[ph[0].num + 1];
 
-	philo_num =  ph[0].num;
-	if (pthread_create(&ph_thread[0], NULL, &vital_monitor, (void*)(ph)) != 0)
+	philo_num = ph[0].num;
+	if (pthread_create(&ph_thread[0], NULL, &vital_monitor, (void *)(ph)) != 0)
 	{
 		printf("error in creating threads.\n");
-		return(0);
+		return (0);
 	}
 	i = 0;
 	while (i < philo_num)
 	{
-		if (pthread_create(&ph_thread[i + 1], NULL, &philo_needs_to_eat, (void*)(&ph[i])) != 0)
+		if (pthread_create(&ph_thread[i + 1], NULL, &philo_needs_to_eat,
+				(void *)(&ph[i])) != 0)
 		{
 			printf("error in creating threads.\n");
-			return(0);
+			return (0);
 		}
 		i++;
 	}
@@ -57,20 +58,20 @@ int init_threads(t_philo *ph)
 		if (pthread_join(ph_thread[i], NULL) != 0)
 		{
 			printf("error in joining threads.\n");
-			return(0);
+			return (0);
 		}
 		i++;
 	}
-	return(1);
+	return (1);
 }
 
-int init_philo(int argc, char** argv)
+int	init_philo(int argc, char **argv)
 {
-	t_arg	*arg;
-	t_philo *ph;
-	pthread_mutex_t *mutex_forks;
+	t_arg			*arg;
+	t_philo			*ph;
+	pthread_mutex_t	*mutex_forks;
 
-	arg = malloc(sizeof(t_arg) *  1); // remember to free
+	arg = malloc(sizeof(t_arg) * 1); // remember to free
 	if (!arg)
 		return (0);
 	if (parsing(argc, argv, arg) == 0)
@@ -78,7 +79,6 @@ int init_philo(int argc, char** argv)
 		free(arg);
 		return (0);
 	}
-
 	if (arg->num == 1)
 	{
 		usleep(arg->time_to_die);
@@ -98,12 +98,12 @@ int init_philo(int argc, char** argv)
 		return (0);
 	free(ph);
 	free(mutex_forks);
-	return(1);
+	return (1);
 }
 
-void int_mutex_forks(pthread_mutex_t *mutex_forks, int philo_num)
+void	int_mutex_forks(pthread_mutex_t *mutex_forks, int philo_num)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < philo_num)
@@ -113,9 +113,9 @@ void int_mutex_forks(pthread_mutex_t *mutex_forks, int philo_num)
 	}
 }
 
-void philo_assignment(t_philo *ph, t_arg *arg, pthread_mutex_t *mutex_forks)
+void	philo_assignment(t_philo *ph, t_arg *arg, pthread_mutex_t *mutex_forks)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < arg->num)
@@ -138,7 +138,7 @@ void philo_assignment(t_philo *ph, t_arg *arg, pthread_mutex_t *mutex_forks)
 	}
 }
 
-int parsing(int argc, char** argv, t_arg *arg)
+int	parsing(int argc, char **argv, t_arg *arg)
 {
 	arg->num = ft_atoi_isnum(argv[0]);
 	arg->time_to_die = ft_atoi_isnum(argv[1]);
@@ -156,7 +156,8 @@ int parsing(int argc, char** argv, t_arg *arg)
 	}
 	else
 		arg->must_eat = 2147483647;
-	if (arg->num <= 0 || arg->time_to_die <= 0 || arg->time_to_eat < 0 || arg->time_to_sleep < 0)
+	if (arg->num <= 0 || arg->time_to_die <= 0 || arg->time_to_eat < 0
+		|| arg->time_to_sleep < 0)
 	{
 		if (arg->num == 0)
 			printf("Are you sure to start the game without any philos?\n");
@@ -168,12 +169,12 @@ int parsing(int argc, char** argv, t_arg *arg)
 	}
 	if (argc == 4)
 		arg->must_eat = 2147483647;
-	return(1);
+	return (1);
 }
 
-int main(int argc, char** argv)
+int	main(int argc, char **argv)
 {
-	int ret;
+	int	ret;
 
 	if (argc < 5 || argc > 6)
 	{
@@ -185,5 +186,5 @@ int main(int argc, char** argv)
 		printf("something goes wrong.\n");
 	if (ret == -1)
 		printf("0 philo 1 died\n");
-	return(0);
+	return (0);
 }
