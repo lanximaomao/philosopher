@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 09:37:32 by lsun              #+#    #+#             */
-/*   Updated: 2023/04/08 20:16:00 by lsun             ###   ########.fr       */
+/*   Updated: 2023/04/11 10:35:52 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ void	ft_usleep(unsigned long long microseconds)
 {
 	unsigned long long	current_time;
 
-	current_time = get_current_time() * 1000;
-	while (timestamp(current_time) < microseconds)
+	current_time = get_current_time();
+	while (timestamp(current_time) * 1000 < microseconds)
 	{
 		usleep(500);
 	}
