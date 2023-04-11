@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 16:59:33 by lsun              #+#    #+#             */
-/*   Updated: 2023/04/08 20:18:24 by lsun             ###   ########.fr       */
+/*   Updated: 2023/04/08 20:45:25 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,3 +102,4 @@ void	*vital_monitor(void *arg)
 	death_announcement(timestamp(ph[i].start), ph[i].thread_id, ph);
 	return (NULL);
 }
+
