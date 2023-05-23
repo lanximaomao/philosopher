@@ -6,7 +6,7 @@
 #    By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/27 14:37:25 by lsun              #+#    #+#              #
-#    Updated: 2023/04/11 10:45:13 by lsun             ###   ########.fr        #
+#    Updated: 2023/05/23 19:37:19 by lsun             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = philo
 
 SRC = main.c philo_utils.c parsing.c thread_op.c thread_function.c
 OBJ = $(SRC:.c=.o)
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -g -fsanitize=thread
 
 all: $(NAME)
 

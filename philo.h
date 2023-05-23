@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 20:05:24 by linlinsun         #+#    #+#             */
-/*   Updated: 2023/04/11 10:16:51 by lsun             ###   ########.fr       */
+/*   Updated: 2023/05/23 21:18:28 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,14 @@ typedef struct s_philo
 	int					status;
 	pthread_mutex_t		*mutex_left;
 	pthread_mutex_t		*mutex_right;
+	//pthread_mutex_t		mutex_is_alive;
+	//pthread_mutex_t		mutex_prev_meal;
+	//pthread_mutex_t		mutex_last_meal;
+	//pthread_mutex_t		mutex_meal_count;
 }						t_philo;
 
 int						ft_atoi_isnum(const char *str);
-void					ft_usleep(unsigned long long mseconds);
+void					ft_usleep(unsigned long long mseconds, t_philo *ph);
 unsigned long long		timestamp(unsigned long long start);
 unsigned long long		get_current_time(void);
 int						parsing(int argc, char **argv, t_arg *arg);
