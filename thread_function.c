@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 16:59:33 by lsun              #+#    #+#             */
-/*   Updated: 2023/05/23 21:17:55 by lsun             ###   ########.fr       */
+/*   Updated: 2023/05/24 15:44:57 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,16 @@ void	*philo_needs_to_eat(void *arg)
 		ft_usleep(ph->time_to_eat, ph);
 	while (ph->meal_count < ph->must_eat)
 	{
-		if (ph->is_alive != 1)
-			break ;
+		//if (ph->is_alive != 1)
+		//	break ;
 		printf("%llu %d is thinking\n", timestamp(ph->start), ph->thread_id);
 		if (eat_philo(ph) == 0)
 			return (NULL);
 		if (ph->is_alive != 1)
 			break ;
 		printf("%llu %d is sleeping\n", timestamp(ph->start), ph->thread_id);
-		ft_usleep(ph->time_to_sleep * 1000, ph);
+		if (ft_usleep(ph->time_to_sleep * 1000, ph) == 0)//someone died
+			break;
 		ph->meal_count++;
 		if (ph->meal_count == ph->must_eat)
 			break ;
@@ -45,15 +46,16 @@ int	eat_philo(t_philo *ph)
 	printf("%llu %d has taken a fork\n", timestamp(ph->start), ph->thread_id);
 	pthread_mutex_lock(ph->mutex_right);
 	printf("%llu %d has taken a fork\n", timestamp(ph->start), ph->thread_id);
-	if (ph->is_alive == 1)
-	{
+	//if (ph->is_alive == 1)
+	//{
 		printf("%llu %d is eating\n", timestamp(ph->start), ph->thread_id);
 		ph->previous_meal = ph->last_meal;
 		ph->last_meal = get_current_time();
-		ft_usleep(ph->time_to_eat * 1000, ph);
-	}
-	else
-		return (0);
+		if (ft_usleep(ph->time_to_eat * 1000, ph) == 0)
+			return (0);
+	//}
+	//else
+	//	return (0);
 	pthread_mutex_unlock(ph->mutex_right);
 	pthread_mutex_unlock(ph->mutex_left);
 	return (1);
@@ -65,7 +67,9 @@ void	death_announcement(unsigned long long time_of_death, int thread_id,
 	int	i;
 
 	i = -1;
+	//lock
 	printf("%llu %d died\n", time_of_death, thread_id);
+	//unlock
 	while (++i < ph[0].num)
 		ph[i].is_alive = 0;
 }
