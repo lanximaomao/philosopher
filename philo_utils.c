@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 09:37:32 by lsun              #+#    #+#             */
-/*   Updated: 2023/05/17 21:19:46 by lsun             ###   ########.fr       */
+/*   Updated: 2023/06/02 06:59:53 by linlinsun        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,34 @@ unsigned long long	get_current_time(void)
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
-void	ft_usleep(unsigned long long microseconds)
+int	ft_usleep(unsigned long long microseconds, t_philo *ph, int flag)
 {
+	int ret;
 	unsigned long long	current_time;
 
 	current_time = get_current_time();
 	while (timestamp(current_time) * 1000 < microseconds)
 	{
-		usleep(500);
+		if (flag == 1)
+		{
+			//pthread_mutex_lock(ph->mutex_status);
+			if (ph->is_alive == 1)
+			{
+				usleep(500);
+				ret = 1;
+				//pthread_mutex_unlock(ph->mutex_status);
+			}
+			else
+			{
+				//pthread_mutex_unlock(ph->mutex_status);
+				ret = -1;
+			}
+		}
+		else
+		{
+			usleep(500);
+			ret = 0;
+		}
 	}
+	return(ret);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   thread_op.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 19:56:51 by lsun              #+#    #+#             */
-/*   Updated: 2023/04/11 10:18:32 by lsun             ###   ########.fr       */
+/*   Updated: 2023/05/31 21:46:28 by linlinsun        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	create(pthread_t *ph_thread, t_philo *ph, int philo_num)
 	i = 0;
 	while (i < philo_num)
 	{
-		if (pthread_create(&ph_thread[i + 1], NULL, &philo_needs_to_eat,
+		if (pthread_create(&ph_thread[i + 1], NULL, &philo_routine,
 				(void *)(&ph[i])) != 0)
 		{
 			printf("error in creating threads.\n");

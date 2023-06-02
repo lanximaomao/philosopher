@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 20:03:22 by lsun              #+#    #+#             */
-/*   Updated: 2023/04/11 10:16:43 by lsun             ###   ########.fr       */
+/*   Updated: 2023/06/02 05:37:02 by linlinsun        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int	init_philo(int argc, char **argv, t_arg *arg)
 {
 	t_philo			*ph;
 	pthread_mutex_t	*mutex_forks;
+	pthread_mutex_t	*mutex_status;
 
 	if (parsing(argc, argv, arg) == 0)
 		return (0);
@@ -56,8 +57,11 @@ int	init_philo(int argc, char **argv, t_arg *arg)
 	mutex_forks = malloc(sizeof(pthread_mutex_t) * arg->num);
 	if (!mutex_forks)
 		return (0);
-	init_mutex_forks(mutex_forks, arg->num);
-	philo_assignment(ph, arg, mutex_forks);
+	mutex_status = malloc(sizeof(pthread_mutex_t) * arg->num);
+	if (!mutex_status)
+		return (0);
+	init_mutex_forks(mutex_forks, mutex_status, arg->num);
+	philo_assignment(ph, arg, mutex_forks, mutex_status);
 	if (init_threads(ph) == 0)
 		return (0);
 	free(mutex_forks);
@@ -65,7 +69,7 @@ int	init_philo(int argc, char **argv, t_arg *arg)
 	return (1);
 }
 
-void	init_mutex_forks(pthread_mutex_t *mutex_forks, int philo_num)
+void	init_mutex_forks(pthread_mutex_t *mutex_forks, pthread_mutex_t *mutex_status, int philo_num)
 {
 	int	i;
 
@@ -73,11 +77,12 @@ void	init_mutex_forks(pthread_mutex_t *mutex_forks, int philo_num)
 	while (i < philo_num)
 	{
 		pthread_mutex_init(&mutex_forks[i], NULL);
+		pthread_mutex_init(&mutex_status[i], NULL);
 		i++;
 	}
 }
 
-void	philo_assignment(t_philo *ph, t_arg *arg, pthread_mutex_t *mutex_forks)
+void	philo_assignment(t_philo *ph, t_arg *arg, pthread_mutex_t *mutex_forks, pthread_mutex_t *mutex_status)
 {
 	int	i;
 
@@ -98,6 +103,7 @@ void	philo_assignment(t_philo *ph, t_arg *arg, pthread_mutex_t *mutex_forks)
 		ph[i].start = get_current_time();
 		ph[i].last_meal = ph[i].start;
 		ph[i].previous_meal = ph[i].start;
+		ph[i].mutex_status = &mutex_status[i];
 		i++;
 	}
 }

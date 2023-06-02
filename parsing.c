@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 19:46:54 by lsun              #+#    #+#             */
-/*   Updated: 2023/04/08 19:47:11 by lsun             ###   ########.fr       */
+/*   Updated: 2023/05/31 21:26:47 by linlinsun        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	parsing(int argc, char **argv, t_arg *arg)
 	{
 		arg->must_eat = ft_atoi_isnum(argv[4]);
 		if (arg->must_eat == 0)
-			printf("Must eat is zero. I am good, no more eating. Thanks!\n");
+			printf("Must eat is zero. Are you kidding me?!\n");
 		else if (arg->must_eat < 0)
 			printf("Must eat should be a unsigned int.\n");
 		if (arg->must_eat <= 0)
