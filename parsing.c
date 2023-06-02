@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+        */
+/*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 19:46:54 by lsun              #+#    #+#             */
-/*   Updated: 2023/05/31 21:26:47 by linlinsun        ###   ########.fr       */
+/*   Updated: 2023/06/02 13:06:01 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	parsing_error(t_arg *arg)
 		if (arg->num == 0)
 			printf("Are you sure to start the game without any philos?\n");
 		if (arg->time_to_die == 0)
-			printf("Time to die is zero. Very sad, I died immediately.\n");
+			printf("Time to die is zero.\n");
 		else
 			printf("wrong input.\n");
 		return (0);

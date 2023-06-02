@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+        */
+/*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 20:05:24 by linlinsun         #+#    #+#             */
-/*   Updated: 2023/06/02 06:35:57 by linlinsun        ###   ########.fr       */
+/*   Updated: 2023/06/02 11:27:02 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,6 @@ int						create(pthread_t *ph_thread, t_philo *ph,
 							int philo_num);
 int						join(pthread_t *ph_thread, int philo_num);
 int						init_threads(t_philo *ph);
-int						check_ate_enough(t_philo *ph);
+int						check_status(t_philo *ph);
 
 #endif

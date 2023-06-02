@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+        */
+/*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 09:37:32 by lsun              #+#    #+#             */
-/*   Updated: 2023/06/02 06:59:53 by linlinsun        ###   ########.fr       */
+/*   Updated: 2023/06/02 13:51:30 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,34 +51,29 @@ unsigned long long	get_current_time(void)
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
+/*
+** flag 0 means no need to do mutex
+** -1 means no need to sleep, 0 means sleep the whole time
+*/
 int	ft_usleep(unsigned long long microseconds, t_philo *ph, int flag)
 {
-	int ret;
+	int status;
 	unsigned long long	current_time;
 
+	status = 0;
 	current_time = get_current_time();
 	while (timestamp(current_time) * 1000 < microseconds)
 	{
 		if (flag == 1)
 		{
-			//pthread_mutex_lock(ph->mutex_status);
-			if (ph->is_alive == 1)
-			{
+			status = check_status(ph);
+			if (status == 1)// -1, 0, 1
 				usleep(500);
-				ret = 1;
-				//pthread_mutex_unlock(ph->mutex_status);
-			}
 			else
-			{
-				//pthread_mutex_unlock(ph->mutex_status);
-				ret = -1;
-			}
+				return (-1);
 		}
 		else
-		{
 			usleep(500);
-			ret = 0;
-		}
 	}
-	return(ret);
+	return(0);
 }
