@@ -6,7 +6,7 @@
 /*   By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 20:03:22 by lsun              #+#    #+#             */
-/*   Updated: 2023/06/02 05:37:02 by linlinsun        ###   ########.fr       */
+/*   Updated: 2023/06/04 13:03:15 by linlinsun        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	main(int argc, char **argv)
 	arg = malloc(sizeof(t_arg) * 1);
 	if (!arg)
 		return (0);
-	ret = init_philo(--argc, ++argv, arg);
+	ret = philo_in_threads(--argc, ++argv, arg);
 	if (ret == 0)
 		printf("something goes wrong.\n");
 	if (ret == -1)
@@ -38,7 +38,7 @@ int	main(int argc, char **argv)
 	return (0);
 }
 
-int	init_philo(int argc, char **argv, t_arg *arg)
+int	philo_in_threads(int argc, char **argv, t_arg *arg)
 {
 	t_philo			*ph;
 	pthread_mutex_t	*mutex_forks;
@@ -60,7 +60,7 @@ int	init_philo(int argc, char **argv, t_arg *arg)
 	mutex_status = malloc(sizeof(pthread_mutex_t) * arg->num);
 	if (!mutex_status)
 		return (0);
-	init_mutex_forks(mutex_forks, mutex_status, arg->num);
+	init_mutex(mutex_forks, mutex_status, arg->num);
 	philo_assignment(ph, arg, mutex_forks, mutex_status);
 	if (init_threads(ph) == 0)
 		return (0);
@@ -69,7 +69,7 @@ int	init_philo(int argc, char **argv, t_arg *arg)
 	return (1);
 }
 
-void	init_mutex_forks(pthread_mutex_t *mutex_forks, pthread_mutex_t *mutex_status, int philo_num)
+void	init_mutex(pthread_mutex_t *mutex_forks, pthread_mutex_t *mutex_status, int philo_num)
 {
 	int	i;
 
@@ -99,7 +99,6 @@ void	philo_assignment(t_philo *ph, t_arg *arg, pthread_mutex_t *mutex_forks, pth
 		ph[i].mutex_right = &mutex_forks[i];
 		ph[i].meal_count = 0;
 		ph[i].is_alive = 1;
-		ph[i].status = 0;
 		ph[i].start = get_current_time();
 		ph[i].last_meal = ph[i].start;
 		ph[i].previous_meal = ph[i].start;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 09:37:32 by lsun              #+#    #+#             */
-/*   Updated: 2023/06/02 13:51:30 by lsun             ###   ########.fr       */
+/*   Updated: 2023/06/04 12:53:36 by linlinsun        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,9 @@ int	ft_usleep(unsigned long long microseconds, t_philo *ph, int flag)
 	{
 		if (flag == 1)
 		{
-			status = check_status(ph);
+			pthread_mutex_lock(ph->mutex_status);
+			status = ph->is_alive; // is dead
+			pthread_mutex_unlock(ph->mutex_status);
 			if (status == 1)// -1, 0, 1
 				usleep(500);
 			else
@@ -77,3 +79,22 @@ int	ft_usleep(unsigned long long microseconds, t_philo *ph, int flag)
 	}
 	return(0);
 }
+
+/*
+** return -1 means philo is dead
+** return 0 means ate enough
+** return 1 means need to eat more
+*/
+//int check_status(t_philo *ph)
+//{
+//	if (ph->last_meal - ph->previous_meal >= ph->time_to_die)
+//	{
+//		pthread_mutex_lock(ph->mutex_status);
+//		ph->is_alive = -1; // is dead
+//		pthread_mutex_unlock(ph->mutex_status);
+//		//printf("%llu %d died\n", timestamp(ph->start), ph->thread_id);
+//		return(-1);
+//	}
+//	else
+//		return(1);
+//}
