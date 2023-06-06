@@ -3,37 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   philo_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+        */
+/*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 09:37:32 by lsun              #+#    #+#             */
-/*   Updated: 2023/06/04 12:53:36 by linlinsun        ###   ########.fr       */
+/*   Updated: 2023/06/06 21:17:49 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-int	ft_atoi_isnum(const char *str)
-{
-	long	result;
-	int		sign;
-
-	sign = 1;
-	result = 0;
-	while (*str == ' ' || (*str >= 9 && *str <= 13))
-		str++;
-	if (*str == '-')
-		sign = -1;
-	if (*str == '-' || *str == '+')
-		str++;
-	while (*str >= '0' && *str <= '9')
-	{
-		result = result * 10 + (*str - '0');
-		str++;
-	}
-	if (*str != '\0' && (*str < 0 || *str > 9))
-		return (-1);
-	return (result * sign);
-}
 
 unsigned long long	timestamp(unsigned long long start)
 {
@@ -55,9 +32,9 @@ unsigned long long	get_current_time(void)
 ** flag 0 means no need to do mutex
 ** -1 means no need to sleep, 0 means sleep the whole time
 */
-int	ft_usleep(unsigned long long microseconds, t_philo *ph, int flag)
+int	ft_usleep(unsigned long long microseconds, t_philo **ph, int flag)
 {
-	int status;
+	int					status;
 	unsigned long long	current_time;
 
 	status = 0;
@@ -66,10 +43,8 @@ int	ft_usleep(unsigned long long microseconds, t_philo *ph, int flag)
 	{
 		if (flag == 1)
 		{
-			pthread_mutex_lock(ph->mutex_status);
-			status = ph->is_alive; // is dead
-			pthread_mutex_unlock(ph->mutex_status);
-			if (status == 1)// -1, 0, 1
+			status = update_status(ph);
+			if (status == 0)
 				usleep(500);
 			else
 				return (-1);
@@ -77,24 +52,44 @@ int	ft_usleep(unsigned long long microseconds, t_philo *ph, int flag)
 		else
 			usleep(500);
 	}
-	return(0);
+	return (0);
 }
 
-/*
-** return -1 means philo is dead
-** return 0 means ate enough
-** return 1 means need to eat more
-*/
-//int check_status(t_philo *ph)
-//{
-//	if (ph->last_meal - ph->previous_meal >= ph->time_to_die)
-//	{
-//		pthread_mutex_lock(ph->mutex_status);
-//		ph->is_alive = -1; // is dead
-//		pthread_mutex_unlock(ph->mutex_status);
-//		//printf("%llu %d died\n", timestamp(ph->start), ph->thread_id);
-//		return(-1);
-//	}
-//	else
-//		return(1);
-//}
+int	update_status(t_philo **ph)
+{
+	if ((*ph)->last_meal == (*ph)->start)
+	{
+		if (timestamp((*ph)->start) >= (*ph)->time_to_die)
+		{
+			pthread_mutex_lock((*ph)->mutex_status);
+			(*ph)->is_alive = -1;
+			pthread_mutex_unlock((*ph)->mutex_status);
+			return (-1);
+		}
+	}
+	else if ((*ph)->last_meal - (*ph)->previous_meal >= (*ph)->time_to_die)
+	{
+		pthread_mutex_lock((*ph)->mutex_status);
+		(*ph)->is_alive = -1;
+		pthread_mutex_unlock((*ph)->mutex_status);
+		return (-1);
+	}
+	if ((*ph)->meal_count == (*ph)->must_eat)
+	{
+		pthread_mutex_lock((*ph)->mutex_status);
+		(*ph)->is_alive = 0;
+		pthread_mutex_unlock((*ph)->mutex_status);
+		return (-1);
+	}
+	return (0);
+}
+
+int	check_status(t_philo **ph)
+{
+	int	status;
+
+	pthread_mutex_lock((*ph)->mutex_status);
+	status = (*ph)->is_alive;
+	pthread_mutex_unlock((*ph)->mutex_status);
+	return (status);
+}

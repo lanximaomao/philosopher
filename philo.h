@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+        */
+/*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 20:05:24 by linlinsun         #+#    #+#             */
-/*   Updated: 2023/06/04 13:09:56 by linlinsun        ###   ########.fr       */
+/*   Updated: 2023/06/06 21:52:46 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,27 +46,33 @@ typedef struct s_philo
 	pthread_mutex_t		*mutex_status;
 }						t_philo;
 
-int						ft_atoi_isnum(const char *str);
-int						ft_usleep(unsigned long long mseconds, t_philo *ph, int flag);
+/*
+** main.c
+*/
+int						philo_in_threads(int argc, char **argv, t_arg *arg);
+void					init_mutex(pthread_mutex_t *mutex_forks,
+							pthread_mutex_t *mutex_status, int philo_num);
+void					destory_mutex(pthread_mutex_t *mutex_forks,
+							pthread_mutex_t *mutex_status, int philo_num);
+void					philo_assignment(t_philo *ph, t_arg *arg,
+							pthread_mutex_t *mutex_forks,
+							pthread_mutex_t *mutex_status);
+/*
+** parsing.c
+*/
+int						parsing(int argc, char **argv, t_arg *arg);
+void					*vital_monitor(void *arg);
+int						init_threads(t_philo *ph);
+void					*philo_routine(void *arg);
+
+/*
+** philo_utils.c
+*/
 unsigned long long		timestamp(unsigned long long start);
 unsigned long long		get_current_time(void);
-int						parsing(int argc, char **argv, t_arg *arg);
-int						philo_in_threads(int argc, char **argv, t_arg *arg);
-void					philo_assignment(t_philo *ph, t_arg *arg,
-							pthread_mutex_t *mutex_forks, pthread_mutex_t *mutex_status);
-int						philo_routine(void *arg);
-void					*vital_monitor(void *arg);
-void					death_announcement(unsigned long long time_of_death,
-							int thread_id, t_philo *ph);
-void					init_mutex(pthread_mutex_t *mutex_forks, pthread_mutex_t *mutex_status,
-							int philo_num);
-int						philo_eat(t_philo *ph);
-int						parsing_error(t_arg *arg);
-int						create(pthread_t *ph_thread, t_philo *ph,
-							int philo_num);
-int						join(pthread_t *ph_thread, int philo_num);
-int						check_status(t_philo *ph);
-int						ft_printf(const char *str, ...);
-int	init_threads(t_philo *ph);
+int						ft_usleep(unsigned long long microseconds, t_philo **ph,
+							int flag);
+int						update_status(t_philo **ph);
+int						check_status(t_philo **ph);
 
 #endif

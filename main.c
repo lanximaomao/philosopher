@@ -3,18 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+        */
+/*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 20:03:22 by lsun              #+#    #+#             */
-/*   Updated: 2023/06/04 13:03:15 by linlinsun        ###   ########.fr       */
+/*   Updated: 2023/06/06 22:10:53 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
-** EAT--> THINK --> SLEEP
-*/
-
 #include "philo.h"
+
+/*
+** to be fixed: ./philo 3 410 200 200 100
+** destory mutex
+*/
 
 int	main(int argc, char **argv)
 {
@@ -30,8 +31,6 @@ int	main(int argc, char **argv)
 	if (!arg)
 		return (0);
 	ret = philo_in_threads(--argc, ++argv, arg);
-	if (ret == 0)
-		printf("something goes wrong.\n");
 	if (ret == -1)
 		printf("0 philo 1 died\n");
 	free(arg);
@@ -52,24 +51,23 @@ int	philo_in_threads(int argc, char **argv, t_arg *arg)
 		return (-1);
 	}
 	ph = malloc(sizeof(t_philo) * arg->num);
-	if (!ph)
-		return (0);
 	mutex_forks = malloc(sizeof(pthread_mutex_t) * arg->num);
-	if (!mutex_forks)
-		return (0);
 	mutex_status = malloc(sizeof(pthread_mutex_t) * arg->num);
-	if (!mutex_status)
+	if (!ph || !mutex_forks || !mutex_status)
 		return (0);
 	init_mutex(mutex_forks, mutex_status, arg->num);
 	philo_assignment(ph, arg, mutex_forks, mutex_status);
 	if (init_threads(ph) == 0)
 		return (0);
+	destory_mutex(mutex_forks, mutex_status, arg->num);
+	free(mutex_status);
 	free(mutex_forks);
 	free(ph);
 	return (1);
 }
 
-void	init_mutex(pthread_mutex_t *mutex_forks, pthread_mutex_t *mutex_status, int philo_num)
+void	init_mutex(pthread_mutex_t *mutex_forks, pthread_mutex_t *mutex_status,
+		int philo_num)
 {
 	int	i;
 
@@ -82,7 +80,8 @@ void	init_mutex(pthread_mutex_t *mutex_forks, pthread_mutex_t *mutex_status, int
 	}
 }
 
-void	philo_assignment(t_philo *ph, t_arg *arg, pthread_mutex_t *mutex_forks, pthread_mutex_t *mutex_status)
+void	philo_assignment(t_philo *ph, t_arg *arg, pthread_mutex_t *mutex_forks,
+		pthread_mutex_t *mutex_status)
 {
 	int	i;
 
@@ -103,6 +102,20 @@ void	philo_assignment(t_philo *ph, t_arg *arg, pthread_mutex_t *mutex_forks, pth
 		ph[i].last_meal = ph[i].start;
 		ph[i].previous_meal = ph[i].start;
 		ph[i].mutex_status = &mutex_status[i];
+		i++;
+	}
+}
+
+void	destory_mutex(pthread_mutex_t *mutex_forks,
+		pthread_mutex_t *mutex_status, int philo_num)
+{
+	int	i;
+
+	i = 0;
+	while (i < philo_num)
+	{
+		pthread_mutex_destroy(&mutex_forks[i]);
+		pthread_mutex_destroy(&mutex_status[i]);
 		i++;
 	}
 }

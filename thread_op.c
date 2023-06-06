@@ -3,36 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   thread_op.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linlinsun <linlinsun@student.42.fr>        +#+  +:+       +#+        */
+/*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 19:56:51 by lsun              #+#    #+#             */
-/*   Updated: 2023/06/04 12:54:16 by linlinsun        ###   ########.fr       */
+/*   Updated: 2023/06/06 21:18:00 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	init_threads(t_philo *ph)
-{
-	int			philo_num;
-	pthread_t	*ph_thread;
-
-	philo_num = ph[0].num;
-	ph_thread = malloc(sizeof(pthread_t) * (philo_num + 1));
-	if (!ph_thread)
-	{
-		printf("malloc fail.\n");
-		return (0);
-	}
-	if (create(ph_thread, ph, philo_num) == 0)
-		return (0);
-	if (join(ph_thread, philo_num) == 0)
-		return (0);
-	free(ph_thread);
-	return (1);
-}
-
-int	create(pthread_t *ph_thread, t_philo *ph, int philo_num)
+static int	create(pthread_t *ph_thread, t_philo *ph, int philo_num)
 {
 	int	i;
 
@@ -56,7 +36,7 @@ int	create(pthread_t *ph_thread, t_philo *ph, int philo_num)
 	return (1);
 }
 
-int	join(pthread_t *ph_thread, int philo_num)
+static int	join(pthread_t *ph_thread, int philo_num)
 {
 	int	i;
 
@@ -70,5 +50,25 @@ int	join(pthread_t *ph_thread, int philo_num)
 		}
 		i++;
 	}
+	return (1);
+}
+
+int	init_threads(t_philo *ph)
+{
+	int			philo_num;
+	pthread_t	*ph_thread;
+
+	philo_num = ph[0].num;
+	ph_thread = malloc(sizeof(pthread_t) * (philo_num + 1));
+	if (!ph_thread)
+	{
+		printf("malloc fail.\n");
+		return (0);
+	}
+	if (create(ph_thread, ph, philo_num) == 0)
+		return (0);
+	if (join(ph_thread, philo_num) == 0)
+		return (0);
+	free(ph_thread);
 	return (1);
 }
