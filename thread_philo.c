@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 16:59:33 by lsun              #+#    #+#             */
-/*   Updated: 2023/06/06 22:11:49 by lsun             ###   ########.fr       */
+/*   Updated: 2023/06/06 23:26:42 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,11 @@ static int	philo_eat(t_philo **ph)
 	printf("%llu %d has taken a fork\n", timestamp((*ph)->start),
 		(*ph)->thread_id);
 	printf("%llu %d is eating\n", timestamp((*ph)->start), (*ph)->thread_id);
-	ft_usleep((*ph)->time_to_eat * 1000, ph, 0);
+	(*ph)->start_meal = get_current_time();
+	if (ft_usleep((*ph)->time_to_eat * 1000, ph, 1) == -1)
+		return (-1);
 	(*ph)->meal_count++;
-	(*ph)->previous_meal = (*ph)->last_meal;
-	(*ph)->last_meal = get_current_time();
+	//(*ph)->previous_meal = (*ph)->start_meal;
 	pthread_mutex_unlock((*ph)->mutex_right);
 	pthread_mutex_unlock((*ph)->mutex_left);
 	return (0);
@@ -88,14 +89,18 @@ void	*philo_routine(void *arg)
 		if (check_status(&ph) == -1)
 			return (NULL);
 		printf("%llu %d is thinking\n", timestamp(ph->start), ph->thread_id);
-		philo_eat(&ph);
+		if (philo_eat(&ph) == -1)
+			return (NULL);
 		if (philo_sleep(&ph) == -1)
 			return (NULL);
 		if (ph->time_to_eat > ph->time_to_sleep)
 		{
 			if (ft_usleep((ph->time_to_eat - ph->time_to_sleep) * 1000, &ph,
 					1) == -1)
+			{
+				printf("%llu returning\n", timestamp(ph->start_meal));
 				return (NULL);
+			}
 		}
 	}
 	return (NULL);

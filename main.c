@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 20:03:22 by lsun              #+#    #+#             */
-/*   Updated: 2023/06/06 22:10:53 by lsun             ###   ########.fr       */
+/*   Updated: 2023/06/06 23:18:47 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	philo_assignment(t_philo *ph, t_arg *arg, pthread_mutex_t *mutex_forks,
 		ph[i].meal_count = 0;
 		ph[i].is_alive = 1;
 		ph[i].start = get_current_time();
-		ph[i].last_meal = ph[i].start;
+		ph[i].start_meal = ph[i].start;
 		ph[i].previous_meal = ph[i].start;
 		ph[i].mutex_status = &mutex_status[i];
 		i++;

@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 20:05:24 by linlinsun         #+#    #+#             */
-/*   Updated: 2023/06/06 21:52:46 by lsun             ###   ########.fr       */
+/*   Updated: 2023/06/06 23:18:44 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ typedef struct s_philo
 	unsigned long long	time_to_sleep;
 	unsigned long long	start;
 	unsigned long long	previous_meal;
-	unsigned long long	last_meal;
+	unsigned long long	start_meal;
 	int					thread_id;
 	int					meal_count;
 	int					is_alive;
