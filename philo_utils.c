@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 09:37:32 by lsun              #+#    #+#             */
-/*   Updated: 2023/06/08 11:40:03 by lsun             ###   ########.fr       */
+/*   Updated: 2023/06/08 17:13:06 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,6 @@ int	update_status(t_philo *ph)
 	{
 		pthread_mutex_lock(ph->mutex_status);
 		ph->is_alive = -1;
-		pthread_mutex_unlock(ph->mutex_status);
-		return (-1);
-	}
-	if (ph->meal_count == ph->must_eat)
-	{
-		pthread_mutex_lock(ph->mutex_status);
-		ph->is_alive = 0;
 		pthread_mutex_unlock(ph->mutex_status);
 		return (-1);
 	}
