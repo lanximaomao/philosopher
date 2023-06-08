@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 19:56:51 by lsun              #+#    #+#             */
-/*   Updated: 2023/06/08 11:23:24 by lsun             ###   ########.fr       */
+/*   Updated: 2023/06/08 11:48:17 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,6 @@ static int	create(pthread_t *ph_thread, t_philo *ph, int philo_num)
 {
 	int	i;
 
-	//i = 0;
-	//if (pthread_create(&ph_thread[0], NULL, &vital_monitor, (void *)(ph)) != 0)
-	//{
-	//	printf("error in creating threads.\n");
-	//	return (0);
-	//}
 	i = 0;
 	while (i < philo_num)
 	{
@@ -53,8 +47,7 @@ static int	join(pthread_t *ph_thread, int philo_num)
 	return (1);
 }
 
-static void	death(unsigned long long time_of_death, int thread_id,
-		t_philo *ph)
+static void	death(unsigned long long time_of_death, int thread_id, t_philo *ph)
 {
 	int	i;
 
@@ -66,35 +59,28 @@ static void	death(unsigned long long time_of_death, int thread_id,
 		{
 			pthread_mutex_lock(ph[i].mutex_status);
 			ph[i].is_alive = -1;
-			//printf("death id=%d, status=%d\n", ph->thread_id, ph->is_alive);
-			//printf(" died at %llu ", timestamp(ph->start));
 			pthread_mutex_unlock(ph[i].mutex_status);
 		}
 		i++;
 	}
 }
 
-static int monitor(t_philo *ph, int philo_num)
+static int	monitor(t_philo *ph, int philo_num)
 {
 	int	i;
-	int count;
-	int status;
+	int	count;
+	int	status;
 
 	i = 0;
 	count = 0;
-	//printf("num=%d\n", philo_num);
 	while (1)
 	{
 		pthread_mutex_lock(ph[i].mutex_status);
 		status = ph[i].is_alive;
 		pthread_mutex_unlock(ph[i].mutex_status);
-		//printf("id=%d, status=%d\n", ph[i].thread_id, ph[i].is_alive);
 		if (status == -1)
-		{
-			//printf(" breaking id=%d, status=%d\n", ph[i].thread_id, ph[i].is_alive);
 			break ;
-		}
-		if (status == 0 )
+		if (status == 0)
 		{
 			if (++count == ph[i].num)
 				return (1);
@@ -107,7 +93,7 @@ static int monitor(t_philo *ph, int philo_num)
 	return (-1);
 }
 
-int	init_threads(t_philo *ph)
+int	thread_op(t_philo *ph)
 {
 	int			philo_num;
 	pthread_t	*ph_thread;
@@ -121,7 +107,6 @@ int	init_threads(t_philo *ph)
 	}
 	if (create(ph_thread, ph, philo_num) == 0)
 		return (0);
-	//monitor
 	monitor(ph, philo_num);
 	if (join(ph_thread, philo_num) == 0)
 		return (0);

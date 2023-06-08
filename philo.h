@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 20:05:24 by linlinsun         #+#    #+#             */
-/*   Updated: 2023/06/08 11:08:14 by lsun             ###   ########.fr       */
+/*   Updated: 2023/06/08 11:50:22 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,6 @@ typedef struct s_philo
 	pthread_mutex_t		*mutex_status;
 }						t_philo;
 
-/*
-** main.c
-*/
 int						philo_in_threads(int argc, char **argv, t_arg *arg);
 void					init_mutex(pthread_mutex_t *mutex_forks,
 							pthread_mutex_t *mutex_status, int philo_num);
@@ -57,20 +54,13 @@ void					destory_mutex(pthread_mutex_t *mutex_forks,
 void					philo_assignment(t_philo *ph, t_arg *arg,
 							pthread_mutex_t *mutex_forks,
 							pthread_mutex_t *mutex_status);
-/*
-** parsing.c
-*/
 int						parsing(int argc, char **argv, t_arg *arg);
-void					*vital_monitor(void *arg);
-int						init_threads(t_philo *ph);
 void					*philo_routine(void *arg);
-
-/*
-** philo_utils.c
-*/
+int						thread_op(t_philo *ph);
 unsigned long long		timestamp(unsigned long long start);
 unsigned long long		get_current_time(void);
-int						ft_usleep(unsigned long long microseconds, t_philo *ph, int flag);
+int						ft_usleep(unsigned long long microseconds,
+							t_philo *ph, int flag);
 int						update_status(t_philo *ph);
 int						check_status(t_philo *ph);
 

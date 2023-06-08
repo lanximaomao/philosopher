@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 09:37:32 by lsun              #+#    #+#             */
-/*   Updated: 2023/06/08 11:13:08 by lsun             ###   ########.fr       */
+/*   Updated: 2023/06/08 11:40:03 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,15 +57,10 @@ int	ft_usleep(unsigned long long microseconds, t_philo *ph, int flag)
 
 int	update_status(t_philo *ph)
 {
-	//printf("id=%d, status=%d", ph->thread_id, ph->is_alive);
-	//printf(" start=%llu, meal-start=%llu, now=%llu", ph->start, ph->last_meal, get_current_time());
-	//printf(" timestamp=%llu\n", timestamp(ph->previous_meal));
-	//if (ph->last_meal - ph->previous_meal >= ph->time_to_die)
 	if (timestamp(ph->last_meal) >= ph->time_to_die)
 	{
 		pthread_mutex_lock(ph->mutex_status);
 		ph->is_alive = -1;
-		//printf("%d died \n", ph->thread_id);
 		pthread_mutex_unlock(ph->mutex_status);
 		return (-1);
 	}

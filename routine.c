@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 16:59:33 by lsun              #+#    #+#             */
-/*   Updated: 2023/06/08 11:08:14 by lsun             ###   ########.fr       */
+/*   Updated: 2023/06/08 11:41:50 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,25 +15,20 @@
 /*
 ** return -1 means philo no need to eat or died
 ** check for status, otherwise, one can get stuck here.
-** during eating, one cannot die. no need to use mutex during sleep
 */
 static int	philo_eat(t_philo *ph)
 {
 	if (check_status(ph) == -1)
 		return (-1);
 	pthread_mutex_lock(ph->mutex_left);
-	printf("%llu %d has taken a fork\n", timestamp(ph->start),
-		ph->thread_id);
+	printf("%llu %d has taken a fork\n", timestamp(ph->start), ph->thread_id);
 	if (check_status(ph) == -1)
 		return (-1);
 	pthread_mutex_lock(ph->mutex_right);
-	printf("%llu %d has taken a fork\n", timestamp(ph->start),
-		ph->thread_id);
+	printf("%llu %d has taken a fork\n", timestamp(ph->start), ph->thread_id);
 	printf("%llu %d is eating\n", timestamp(ph->start), ph->thread_id);
-	//printf("%d before=%llu\n", ph->thread_id, ph->last_meal);
 	ph->previous_meal = ph->last_meal;
 	ph->last_meal = get_current_time();
-	//printf("%d after =%llu\n", ph->thread_id, ph->last_meal);
 	if (ft_usleep(ph->time_to_eat * 1000, ph, 1) == -1)
 		return (-1);
 	ph->meal_count++;
@@ -48,8 +43,7 @@ static int	philo_sleep(t_philo *ph)
 
 	status = check_status(ph);
 	if (status == 1)
-		printf("%llu %d is sleeping\n", timestamp(ph->start),
-			ph->thread_id);
+		printf("%llu %d is sleeping\n", timestamp(ph->start), ph->thread_id);
 	else
 		return (-1);
 	if (ft_usleep(ph->time_to_sleep * 1000, ph, 1) == -1)
