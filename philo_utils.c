@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 09:37:32 by lsun              #+#    #+#             */
-/*   Updated: 2023/06/06 23:35:03 by lsun             ###   ########.fr       */
+/*   Updated: 2023/06/08 11:13:08 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ unsigned long long	get_current_time(void)
 ** flag 0 means no need to do mutex
 ** -1 means no need to sleep, 0 means sleep the whole time
 */
-int	ft_usleep(unsigned long long microseconds, t_philo **ph, int flag)
+int	ft_usleep(unsigned long long microseconds, t_philo *ph, int flag)
 {
 	int					status;
 	unsigned long long	current_time;
@@ -55,33 +55,36 @@ int	ft_usleep(unsigned long long microseconds, t_philo **ph, int flag)
 	return (0);
 }
 
-int	update_status(t_philo **ph)
+int	update_status(t_philo *ph)
 {
-	if (timestamp((*ph)->start_meal) >= (*ph)->time_to_die)
+	//printf("id=%d, status=%d", ph->thread_id, ph->is_alive);
+	//printf(" start=%llu, meal-start=%llu, now=%llu", ph->start, ph->last_meal, get_current_time());
+	//printf(" timestamp=%llu\n", timestamp(ph->previous_meal));
+	//if (ph->last_meal - ph->previous_meal >= ph->time_to_die)
+	if (timestamp(ph->last_meal) >= ph->time_to_die)
 	{
-		pthread_mutex_lock((*ph)->mutex_status);
-		printf("%llu %d returning 01\n", timestamp((*ph)->start_meal), (*ph)->thread_id);
-		(*ph)->is_alive = -1;
-		printf("id=%d, status=%d\n", (*ph)->thread_id, (*ph)->is_alive);
-		pthread_mutex_unlock((*ph)->mutex_status);
+		pthread_mutex_lock(ph->mutex_status);
+		ph->is_alive = -1;
+		//printf("%d died \n", ph->thread_id);
+		pthread_mutex_unlock(ph->mutex_status);
 		return (-1);
 	}
-	if ((*ph)->meal_count == (*ph)->must_eat)
+	if (ph->meal_count == ph->must_eat)
 	{
-		pthread_mutex_lock((*ph)->mutex_status);
-		(*ph)->is_alive = 0;
-		pthread_mutex_unlock((*ph)->mutex_status);
+		pthread_mutex_lock(ph->mutex_status);
+		ph->is_alive = 0;
+		pthread_mutex_unlock(ph->mutex_status);
 		return (-1);
 	}
 	return (0);
 }
 
-int	check_status(t_philo **ph)
+int	check_status(t_philo *ph)
 {
 	int	status;
 
-	pthread_mutex_lock((*ph)->mutex_status);
-	status = (*ph)->is_alive;
-	pthread_mutex_unlock((*ph)->mutex_status);
+	pthread_mutex_lock(ph->mutex_status);
+	status = ph->is_alive;
+	pthread_mutex_unlock(ph->mutex_status);
 	return (status);
 }

@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 20:05:24 by linlinsun         #+#    #+#             */
-/*   Updated: 2023/06/06 23:18:44 by lsun             ###   ########.fr       */
+/*   Updated: 2023/06/08 11:08:14 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ typedef struct s_philo
 	unsigned long long	time_to_sleep;
 	unsigned long long	start;
 	unsigned long long	previous_meal;
-	unsigned long long	start_meal;
+	unsigned long long	last_meal;
 	int					thread_id;
 	int					meal_count;
 	int					is_alive;
@@ -70,9 +70,8 @@ void					*philo_routine(void *arg);
 */
 unsigned long long		timestamp(unsigned long long start);
 unsigned long long		get_current_time(void);
-int						ft_usleep(unsigned long long microseconds, t_philo **ph,
-							int flag);
-int						update_status(t_philo **ph);
-int						check_status(t_philo **ph);
+int						ft_usleep(unsigned long long microseconds, t_philo *ph, int flag);
+int						update_status(t_philo *ph);
+int						check_status(t_philo *ph);
 
 #endif
