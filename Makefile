@@ -6,7 +6,7 @@
 #    By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/27 14:37:25 by lsun              #+#    #+#              #
-#    Updated: 2023/06/08 11:44:04 by lsun             ###   ########.fr        #
+#    Updated: 2023/06/08 12:56:16 by lsun             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ DBUG = -g -fsanitize=thread
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	cc $(OBJ) -o $(NAME) $(FLAGS)
+	cc $(OBJ) -o $(NAME) $(FLAGS) $(DBUG)
 
 $(OBJ): %.o: %.c
 	cc -c $< -o $@ $(FLAGS)

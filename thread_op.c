@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 19:56:51 by lsun              #+#    #+#             */
-/*   Updated: 2023/06/08 11:48:17 by lsun             ###   ########.fr       */
+/*   Updated: 2023/06/08 12:55:05 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,12 @@ static int	monitor(t_philo *ph, int philo_num)
 	count = 0;
 	while (1)
 	{
-		pthread_mutex_lock(ph[i].mutex_status);
-		status = ph[i].is_alive;
-		pthread_mutex_unlock(ph[i].mutex_status);
+		//pthread_mutex_lock(ph[i].mutex_status);
+		//status = ph[i].is_alive;
+		//pthread_mutex_unlock(ph[i].mutex_status);
+		pthread_mutex_lock(ph->mutex_status);
+		status = update_status(&(ph[i]));
+		pthread_mutex_unlock(ph->mutex_status);
 		if (status == -1)
 			break ;
 		if (status == 0)
