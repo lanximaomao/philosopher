@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 20:05:24 by linlinsun         #+#    #+#             */
-/*   Updated: 2023/06/08 11:50:22 by lsun             ###   ########.fr       */
+/*   Updated: 2023/06/08 17:43:24 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,7 @@ int						ft_usleep(unsigned long long microseconds,
 							t_philo *ph, int flag);
 int						update_status(t_philo *ph);
 int						check_status(t_philo *ph);
+int						ate_enough(t_philo *ph);
+int						odd_wait_here(t_philo *ph);
 
 #endif

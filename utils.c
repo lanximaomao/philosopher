@@ -1,32 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_utils.c                                      :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 09:37:32 by lsun              #+#    #+#             */
-/*   Updated: 2023/06/08 17:13:06 by lsun             ###   ########.fr       */
+/*   Updated: 2023/06/08 18:13:26 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-unsigned long long	timestamp(unsigned long long start)
-{
-	unsigned long long	current_time;
-
-	current_time = get_current_time();
-	return (current_time - start);
-}
-
-unsigned long long	get_current_time(void)
-{
-	struct timeval	time;
-
-	gettimeofday(&time, NULL);
-	return (time.tv_sec * 1000 + time.tv_usec / 1000);
-}
 
 /*
 ** flag 0 means no need to do mutex
@@ -75,4 +59,26 @@ int	check_status(t_philo *ph)
 	status = ph->is_alive;
 	pthread_mutex_unlock(ph->mutex_status);
 	return (status);
+}
+
+int	ate_enough(t_philo *ph)
+{
+	if (ph->meal_count == ph->must_eat)
+	{
+		pthread_mutex_lock(ph->mutex_status);
+		ph->is_alive = 0;
+		pthread_mutex_unlock(ph->mutex_status);
+		return (-1);
+	}
+	return (1);
+}
+
+int	odd_wait_here(t_philo *ph)
+{
+	if (ph->thread_id % 2 != 0)
+	{
+		if (ft_usleep(ph->time_to_eat * 1000, ph, 1) == -1)
+			return (-1);
+	}
+	return (0);
 }
