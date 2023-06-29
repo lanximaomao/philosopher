@@ -6,7 +6,7 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 19:56:51 by lsun              #+#    #+#             */
-/*   Updated: 2023/06/06 21:18:00 by lsun             ###   ########.fr       */
+/*   Updated: 2023/06/08 17:19:29 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,9 @@ static int	create(pthread_t *ph_thread, t_philo *ph, int philo_num)
 	int	i;
 
 	i = 0;
-	if (pthread_create(&ph_thread[0], NULL, &vital_monitor, (void *)(ph)) != 0)
-	{
-		printf("error in creating threads.\n");
-		return (0);
-	}
-	i = 0;
 	while (i < philo_num)
 	{
-		if (pthread_create(&ph_thread[i + 1], NULL, &philo_routine,
+		if (pthread_create(&ph_thread[i], NULL, &philo_routine,
 				(void *)(&ph[i])) != 0)
 		{
 			printf("error in creating threads.\n");
@@ -41,7 +35,7 @@ static int	join(pthread_t *ph_thread, int philo_num)
 	int	i;
 
 	i = 0;
-	while (i < philo_num + 1)
+	while (i < philo_num)
 	{
 		if (pthread_join(ph_thread[i], NULL) != 0)
 		{
@@ -53,13 +47,57 @@ static int	join(pthread_t *ph_thread, int philo_num)
 	return (1);
 }
 
-int	init_threads(t_philo *ph)
+static void	death(unsigned long long time_of_death, int thread_id, t_philo *ph)
+{
+	int	i;
+
+	i = 0;
+	printf("%llu %d died\n", time_of_death, thread_id);
+	while (i < ph[0].num)
+	{
+		if (ph[i].thread_id != thread_id)
+		{
+			pthread_mutex_lock(ph[i].mutex_status);
+			ph[i].is_alive = -1;
+			pthread_mutex_unlock(ph[i].mutex_status);
+		}
+		i++;
+	}
+}
+
+static int	monitor(t_philo *ph, int philo_num)
+{
+	int	i;
+	int	count;
+	int	status;
+
+	i = 0;
+	count = 0;
+	while (1)
+	{
+		status = check_status(&ph[i]);
+		if (status == -1)
+			break ;
+		if (status == 0)
+		{
+			if (++count == ph[i].num)
+				return (1);
+		}
+		i++;
+		if (i == philo_num)
+			i = 0;
+	}
+	death(timestamp(ph[i].start), ph[i].thread_id, ph);
+	return (-1);
+}
+
+int	thread_op(t_philo *ph)
 {
 	int			philo_num;
 	pthread_t	*ph_thread;
 
 	philo_num = ph[0].num;
-	ph_thread = malloc(sizeof(pthread_t) * (philo_num + 1));
+	ph_thread = malloc(sizeof(pthread_t) * philo_num);
 	if (!ph_thread)
 	{
 		printf("malloc fail.\n");
@@ -67,6 +105,7 @@ int	init_threads(t_philo *ph)
 	}
 	if (create(ph_thread, ph, philo_num) == 0)
 		return (0);
+	monitor(ph, philo_num);
 	if (join(ph_thread, philo_num) == 0)
 		return (0);
 	free(ph_thread);

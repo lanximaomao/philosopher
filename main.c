@@ -6,16 +6,11 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 20:03:22 by lsun              #+#    #+#             */
-/*   Updated: 2023/06/06 23:18:47 by lsun             ###   ########.fr       */
+/*   Updated: 2023/06/08 11:48:17 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-/*
-** to be fixed: ./philo 3 410 200 200 100
-** destory mutex
-*/
 
 int	main(int argc, char **argv)
 {
@@ -57,7 +52,7 @@ int	philo_in_threads(int argc, char **argv, t_arg *arg)
 		return (0);
 	init_mutex(mutex_forks, mutex_status, arg->num);
 	philo_assignment(ph, arg, mutex_forks, mutex_status);
-	if (init_threads(ph) == 0)
+	if (thread_op(ph) == 0)
 		return (0);
 	destory_mutex(mutex_forks, mutex_status, arg->num);
 	free(mutex_status);
@@ -99,7 +94,7 @@ void	philo_assignment(t_philo *ph, t_arg *arg, pthread_mutex_t *mutex_forks,
 		ph[i].meal_count = 0;
 		ph[i].is_alive = 1;
 		ph[i].start = get_current_time();
-		ph[i].start_meal = ph[i].start;
+		ph[i].last_meal = ph[i].start;
 		ph[i].previous_meal = ph[i].start;
 		ph[i].mutex_status = &mutex_status[i];
 		i++;
@@ -107,7 +102,8 @@ void	philo_assignment(t_philo *ph, t_arg *arg, pthread_mutex_t *mutex_forks,
 }
 
 void	destory_mutex(pthread_mutex_t *mutex_forks,
-		pthread_mutex_t *mutex_status, int philo_num)
+					pthread_mutex_t *mutex_status,
+					int philo_num)
 {
 	int	i;
 
