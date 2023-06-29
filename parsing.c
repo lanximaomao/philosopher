@@ -30,7 +30,7 @@ static int	ft_atoi_isnum(const char *str)
 		result = result * 10 + (*str - '0');
 		str++;
 	}
-	if (*str != '\0' && (*str < 0 || *str > 9))
+	if (*str != '\0' && (*str < 9 || *str > 13))
 		return (-1);
 	return (result * sign);
 }
