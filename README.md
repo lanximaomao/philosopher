@@ -42,4 +42,4 @@ This program should take the following arguments:
 
 ## Results from visualizer
 
-![Algo](images/visualizer.png.png)
+![Visulization](images/visualizer.png)
