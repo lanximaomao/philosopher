@@ -29,8 +29,8 @@ This program should take the following arguments:
 
 **2- Run your program with arguments:**
 
-	./philo 1 800 200 200   (Hint: the philosopher shoud not eat and should die!)
-	./philo 4 310 200 100   (Hint: a philosopher should die!)
+	./philo 1 800 200 200   (Hint:the philosopher shoud not eat and should die!)
+	./philo 4 310 200 100   (Hint:a philosopher should die!)
     ./philo 4 410 200 200   (Hint:no one should die!)
 	./philo 5 800 200 200 7 (Hint:no one should die and the simulation should stop after all philosophers have eaten 7 times.)
 
