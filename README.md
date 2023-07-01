@@ -33,3 +33,13 @@ This program should take the following arguments:
 	./philo 4 310 200 100   (Hint: a philosopher should die!)
     ./philo 4 410 200 200   (Hint:no one should die!)
 	./philo 5 800 200 200 7 (Hint:no one should die and the simulation should stop after all philosophers have eaten 7 times.)
+
+## Testing
+
+*External testers:*
+
++ [Philosophers visualizer](https://nafuka11.github.io/philosophers-visualizer/)
+
+## Results from visualizer
+
+![Algo](images/visualizer.png.png)
