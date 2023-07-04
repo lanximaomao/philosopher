@@ -6,11 +6,11 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 09:37:32 by lsun              #+#    #+#             */
-/*   Updated: 2023/06/08 18:13:26 by lsun             ###   ########.fr       */
+/*   Updated: 2023/07/04 18:05:17 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../includes/philo.h"
 
 /*
 ** flag 0 means no need to do mutex

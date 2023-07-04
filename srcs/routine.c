@@ -6,11 +6,11 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 16:59:33 by lsun              #+#    #+#             */
-/*   Updated: 2023/06/08 18:13:34 by lsun             ###   ########.fr       */
+/*   Updated: 2023/07/04 18:05:09 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../includes/philo.h"
 
 static int	philo_think(t_philo *ph)
 {

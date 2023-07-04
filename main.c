@@ -6,11 +6,11 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 20:03:22 by lsun              #+#    #+#             */
-/*   Updated: 2023/06/08 11:48:17 by lsun             ###   ########.fr       */
+/*   Updated: 2023/07/04 18:05:27 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "includes/philo.h"
 
 int	main(int argc, char **argv)
 {

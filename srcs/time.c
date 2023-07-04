@@ -6,11 +6,11 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 17:43:44 by lsun              #+#    #+#             */
-/*   Updated: 2023/06/08 17:43:45 by lsun             ###   ########.fr       */
+/*   Updated: 2023/07/04 18:05:15 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../includes/philo.h"
 
 unsigned long long	timestamp(unsigned long long start)
 {

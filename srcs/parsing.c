@@ -6,11 +6,11 @@
 /*   By: lsun <lsun@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 19:46:54 by lsun              #+#    #+#             */
-/*   Updated: 2023/06/06 21:17:45 by lsun             ###   ########.fr       */
+/*   Updated: 2023/07/04 18:05:04 by lsun             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../includes/philo.h"
 
 static int	ft_atoi_isnum(const char *str)
 {
