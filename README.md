@@ -2,7 +2,7 @@
 
 ## Description
 
-The Dining Philosophers Problem is a well-known synchronization problem in computer science that illustrates challenges in concurrent programming. The problem is based on the analogy of a group of philosophers who sit around a circular table with a bowl of spaghetti and a single fork between each pair of adjacent philosophers. The philosophers alternate between thinking and eating and sleeping. While they eat, they need both forks to eat. The challenge arises when multiple philosophers attempt to pick up the chopsticks simultaneously, leading to potential deadlock or starvation scenarios.
+The Dining Philosophers Problem is a well-known synchronization problem in computer science that illustrates challenges in concurrent programming. The problem is based on the analogy of a group of philosophers who sit around a circular table with a bowl of spaghetti and a single fork between each pair of adjacent philosophers. The philosophers alternate between thinking, eating and sleeping. While they eat, they need both forks to eat. The challenge arises when multiple philosophers attempt to pick up the chopsticks simultaneously, leading to potential deadlock or starvation scenarios. Detailed project requirements can be found [here](Philosophers.pdf).
 
 This project is all about philosophers with threads and mutexes. Specific rules are:
 - [x] **Each philosopher should be one thread.**
